@@ -3,12 +3,12 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Hexo
+title: cc
 subtitle:
 description:
-author: John Doe
-language:
-timezone:
+author: cc
+language: zh-CN 
+timezone:  
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
@@ -63,9 +63,13 @@ pagination_dir: page
 # Extensions
 ## Plugins: http://hexo.io/plugins/
 ## Themes: http://hexo.io/themes/
-theme: landscape
+theme: yilia
 
 # Deployment
 ## Docs: http://hexo.io/docs/deployment.html
 deploy:
-  type:
+    type: git
+    repository: git@github.com:ischuncheng/ischuncheng.github.com.git
+    branch: master
+
+
