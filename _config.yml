@@ -72,4 +72,3 @@ deploy:
     repository: git@github.com:ischuncheng/ischuncheng.github.com.git
     branch: master
 
-
