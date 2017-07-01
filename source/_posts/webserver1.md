@@ -3,7 +3,7 @@ date: 2015-03-17 22:11:47
 tags:
 ---
 
-# 迭代服务器
+# 同步阻塞迭代模型
 web 服务器的底层是socket。socket编程想必大家也是能信手拈来。
 
 
@@ -70,7 +70,7 @@ Transfer/sec:      51.71B
 
 其实这种一次只能处理一个请求的服务器，称之为迭代服务器(iterative server)
 
-# 并发服务器
+# 多进程并发模型
 在正常使用中，我们显然不希望整个服务器被单个请求长期占用，因为一个请求处理速度慢而拖累其余请求。而是希望能同时处理多个请求。最简单的方法就是每次fork一个子进程来服务每个请求。
 
 ```python
@@ -192,4 +192,29 @@ while 循环，第一次时创建fd为4的socket，变量conn指向这个socket�
 
 问题2的解释会复杂一点。具体看之前写的这篇文章。
 
+
+对于多进程，python提供了更加友善的multiprocessing库
+
+```
+import socket
+import multiprocessing
+
+response = 'HTTP/1.1 200 OK\r\nConnection: Close\r\nContent-Length: 1\r\n\r\nA'
+
+server = socket.socket()
+server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+server.bind(('0.0.0.0', 9696))
+server.listen(32)
+
+def handler(conn, addr):
+    request = conn.recv(4096)
+    conn.send(response)
+    conn.close()
+
+while True:
+    conn, addr = server.accept()
+    process = multiprocessing.Process(target=handler, args=(conn, addr))
+    process.daemon = True
+    process.start()
+```
 

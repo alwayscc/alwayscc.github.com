@@ -1,4 +1,4 @@
-title: socket2
+title: 深入socket(一)
 date: 2015-06-18 16:18:38
 tags:
 ---
@@ -106,11 +106,6 @@ struct socket {
 	short			type;
 };
 ```
-
-
-
-
-
 
 
 
@@ -333,4 +328,4 @@ static inline void __put_unused_fd(struct files_struct *files, unsigned int fd)
 ```
 1. 会把释放的fd对应的fdt->open_fds标志位重新置为0。
 2. fdt->next指向当前fd对应的标志位。
-这样也就解释了[上文](/2015/03/17/socket1/)中为fd=4的文件描述符会被不断利用的原因。
+这样也就解释了[上文](/2015/03/17/webserver1/)中为fd=4的文件描述符会被不断利用的原因。
