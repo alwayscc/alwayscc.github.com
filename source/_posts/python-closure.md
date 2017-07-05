@@ -543,3 +543,7 @@ return PyEval_EvalCodeEx(co, globals,
       }
       ......
 ```
+
+ok,如果你看上面看懵了的话，那么我简单总结一下
+
+最初编译时生成了PyCodeObject其中co_cellvars 存了闭包要用的变量名x，调函数func 时， 生成PyFunctionObject, 接着生成了PyFrameObject, PyFrameObject.f_localsplus 存储了co_cellvars变量名指向的数值 1，接着运行这个栈，把f_localsplus 里的 闭包内容cell，打包成tuple，读取 inner_func 的 PyCodeObject，进而修改inner_func 的 PyFunctionObject, 使得inner_func 的 PyFunctionObject 创建时会读取到 闭包的tuple。 这样每次call 闭包函数时都会获取到 上一层的 闭包变量!
