@@ -46,7 +46,6 @@ response = 'HTTP/1.1 200 OK\r\nConnection: Close\r\nContent-Length: 1\r\n\r\nA'
 
 server = socket.socket()
 server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
-server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, 1)
 server.bind(('0.0.0.0', 9696))
 server.listen(1)
 
@@ -190,3 +189,13 @@ finally:
    epoll.close()
    serversocket.close()
 ```
+
+想必你肯定从别的地方或者之前有过了解，epoll的效率要远远好于select。
+优点有很多，比如
+* 支持一个进程打开打开的socket描述符（FD）不受限制（仅受限于操作系统的最大文件句柄数）
+* IO效率不随FD数目增加而线性下降
+
+其中第二条我们在上面已经知道了，因为epoll 只会去关心那些有事件的socket而不会像select 那样从头到尾扫一遍。
+那么第一条是如何做到的，第二条的原理又是如何呢。
+那就要深入了解下二者的源码实现了。
+这个之后会单独写两篇文章来具体阐述二者原理。

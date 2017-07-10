@@ -1,4 +1,4 @@
-title: python-closure
+title: 深入理解装饰器闭包
 date: 2016-11-05 20:14:41
 tags:
 ---
