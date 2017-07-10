@@ -1,5 +1,5 @@
 title: python-closure
-date: 2017-07-05 13:14:41
+date: 2016-11-05 20:14:41
 tags:
 ---
 

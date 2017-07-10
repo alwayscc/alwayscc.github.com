@@ -190,7 +190,7 @@ while 循环，第一次时创建fd为4的socket，变量conn指向这个socket�
 如果循环了偶数次，那么最后fd为5的socket则是最后被conn引用，不会被gc，fd为3的socket一直没有被关闭。
 所以 <code>lsof -i :9696</code>会看到fd为3 和 fd为5的两个socket。
 
-问题2的解释会复杂一点。之后会详细介绍。
+问题2的解释会复杂一点。之后会[详细介绍](/2015/06/18/socket/)。
 
 
 对于多进程，python提供了更加友善的multiprocessing库

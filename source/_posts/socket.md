@@ -58,7 +58,7 @@ asmlinkage long sys_socketcall(int call, unsigned long __user *args)
 
 ```
 
-根据信号选择不同函数处理，创建sockcet会发出<code>SYS_SOCKET</code>信号，从而由`<code>sys_socket</code>处理
+根据信号选择不同函数处理，创建sockcet会发出<code>SYS_SOCKET</code>信号，从而由<code>sys_socket</code>处理
 
 ```
 asmlinkage long sys_socket(int family, int type, int protocol)
