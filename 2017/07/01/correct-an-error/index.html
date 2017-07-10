@@ -6,14 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2015 | cc</title>
+  <title>更改一个错误—accept在不同操作系统实现细节略有不同 | cc</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="cc">
-<meta property="og:url" content="http://yoursite.com/archives/2015/index.html">
+  <meta name="description" content="之前的时候谈accept生成新socket时，这个新socket会继承大多数listening socket的属性，但是文件状态标志比如O_NONBLOCK不会被继承。当时用的settimeout 和 gettimeout来进行验证的。 这是不对的。 因为说settimeout(0) 和 setblocking(0) 是一样的，主要是因为 源码 1234567891011121314static">
+<meta property="og:type" content="article">
+<meta property="og:title" content="更改一个错误—accept在不同操作系统实现细节略有不同">
+<meta property="og:url" content="http://yoursite.com/2017/07/01/correct-an-error/index.html">
 <meta property="og:site_name" content="cc">
+<meta property="og:description" content="之前的时候谈accept生成新socket时，这个新socket会继承大多数listening socket的属性，但是文件状态标志比如O_NONBLOCK不会被继承。当时用的settimeout 和 gettimeout来进行验证的。 这是不对的。 因为说settimeout(0) 和 setblocking(0) 是一样的，主要是因为 源码 1234567891011121314static">
+<meta property="og:updated_time" content="2017-07-01T11:37:20.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cc">
+<meta name="twitter:title" content="更改一个错误—accept在不同操作系统实现细节略有不同">
+<meta name="twitter:description" content="之前的时候谈accept生成新socket时，这个新socket会继承大多数listening socket的属性，但是文件状态标志比如O_NONBLOCK不会被继承。当时用的settimeout 和 gettimeout来进行验证的。 这是不对的。 因为说settimeout(0) 和 setblocking(0) 是一样的，主要是因为 源码 1234567891011121314static">
   
     <link rel="alternative" href="/atom.xml" title="cc" type="application/atom+xml">
   
@@ -131,168 +135,169 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-correct-an-error" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      更改一个错误—accept在不同操作系统实现细节略有不同
+    </h1>
+  
+
+        
+        <a href="/2017/07/01/correct-an-error/" class="archive-article-date">
+  	<time datetime="2017-07-01T11:36:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-01</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>之前的时候谈accept生成新socket时，这个新socket会继承大多数listening socket的属性，但是文件状态标志比如O_NONBLOCK不会被继承。<br>当时用的settimeout 和 gettimeout来进行验证的。</p>
+<p>这是不对的。</p>
+<p>因为说settimeout(0) 和 setblocking(0) 是一样的，主要是因为</p>
+<p><a href="https://github.com/python/cpython/blob/9f3bdcb643623e07497af2fc35f0496c2302f1be/Modules/socketmodule.c" target="_blank" rel="external">源码</a></p>
+<figure class="highlight coq"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">static PyObject *</div><div class="line">sock_settimeout(PySocketSockObject *s, PyObject *arg)</div><div class="line">&#123;</div><div class="line">    _PyTime_t <span class="built_in">timeout</span>;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (socket_parse_timeout(&amp;<span class="built_in">timeout</span>, arg) &lt; <span class="number">0</span>)</div><div class="line">        <span class="keyword">return</span> NULL;</div><div class="line"></div><div class="line">    s-&gt;sock_timeout = <span class="built_in">timeout</span>;</div><div class="line">    <span class="keyword">if</span> (internal_setblocking(s, <span class="built_in">timeout</span> &lt; <span class="number">0</span>) == <span class="number">-1</span>) &#123;</div><div class="line">        <span class="keyword">return</span> NULL;</div><div class="line">    &#125;</div><div class="line">    Py_RETURN_NONE;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>看到了吗 settimeout 会在设置 timeout属性时，调用internal_setblocking ,这个也就是setblocking底层实现。<br>但是通过gettimeout 这个是获取的sock_timeout 属性的值，并不能代表此时的是否设置了O_NONBLOCK。<br>看下PySocketSockObject 这个数据结构<br><a href="https://fossies.org/dox/Python-2.7.13/socketmodule_8h_source.html" target="_blank" rel="external">源码</a></p>
+<figure class="highlight elm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">typedef struct &#123;</div><div class="line">    <span class="type">PyObject_HEAD</span></div><div class="line">    <span class="type">SOCKET_T</span> sock_fd;           /* <span class="type">Socket</span> file descriptor */</div><div class="line">    int sock_family;            /* <span class="type">Address</span> family, e.g., <span class="type">AF_INET</span> */</div><div class="line">    int sock_type;              /* <span class="type">Socket</span> type, e.g., <span class="type">SOCK_STREAM</span> */</div><div class="line">    int sock_proto;             /* <span class="type">Protocol</span> type, usually 0 */</div><div class="line">    <span class="type">PyObject</span> *(*errorhandler)(void); /* <span class="type">Error</span> handler; checks</div><div class="line">                                        errno, returns <span class="type">NULL</span> and</div><div class="line">                                        sets a <span class="type">Python</span> exception */</div><div class="line">    double sock_timeout;                 /* <span class="type">Operation</span> timeout in seconds;</div><div class="line">                                        0.0 means non-blocking */</div><div class="line">    <span class="type">PyObject</span> *weakreflist;</div><div class="line">&#125; <span class="type">PySocketSockObject</span>;</div></pre></td></tr></table></figure>
+<p>这个sock_time 是Python的socket 属性，而非内核socket的属性。<br>所以在accept 生成新socket时，并不会给这个非内核的socket 继承 listening socket 的属性。<br>也就是 gettimeout获取的值跟文件状态标志位没有任何关系。</p>
+<p>那到底能不能直接看到O_NONBLOCK状态的方法呢。有的<code>fcntl</code>库。fcntl 可以访问或者修改这些状态标志位(file status flags)。</p>
+<figure class="highlight pf"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">flags</span> = fcntl.fcntl(s.fileno(), fcntl.F_GETFL)</div><div class="line">fcntl.fcntl(socket.fileno(), fcntl.F_SETFL, <span class="keyword">flags</span> | <span class="keyword">os</span>.O_NONBLOCK)</div></pre></td></tr></table></figure>
+<p>获取当前flags 标志位，设置O_NONBLOCK标志。这其实等价于setblocking(0) 可以看下 setblocking <a href="https://github.com/python/cpython/blob/9f3bdcb643623e07497af2fc35f0496c2302f1be/Modules/socketmodule.c" target="_blank" rel="external">源码</a></p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div></pre></td><td class="code"><pre><div class="line">internal_setblocking(PySocketSockObject *s, <span class="keyword">int</span> block)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> result = <span class="number">-1</span>;</div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> MS_WINDOWS</span></div><div class="line">    u_long arg;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> !defined(MS_WINDOWS) \</span></div><div class="line">    &amp;&amp; !((defined(HAVE_SYS_IOCTL_H) &amp;&amp; defined(FIONBIO)))</div><div class="line">    <span class="keyword">int</span> delay_flag, new_delay_flag;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">ifdef</span> SOCK_NONBLOCK</span></div><div class="line">    <span class="keyword">if</span> (block)</div><div class="line">        s-&gt;sock_type &amp;= (~SOCK_NONBLOCK);</div><div class="line">    <span class="keyword">else</span></div><div class="line">        s-&gt;sock_type |= SOCK_NONBLOCK;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"></div><div class="line">    Py_BEGIN_ALLOW_THREADS</div><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MS_WINDOWS</span></div><div class="line"><span class="meta">#<span class="meta-keyword">if</span> (defined(HAVE_SYS_IOCTL_H) &amp;&amp; defined(FIONBIO))</span></div><div class="line">    block = !block;</div><div class="line">    <span class="keyword">if</span> (ioctl(s-&gt;sock_fd, FIONBIO, (<span class="keyword">unsigned</span> <span class="keyword">int</span> *)&amp;block) == <span class="number">-1</span>)</div><div class="line">        <span class="keyword">goto</span> done;</div><div class="line"><span class="meta">#<span class="meta-keyword">else</span></span></div><div class="line">    delay_flag = fcntl(s-&gt;sock_fd, F_GETFL, <span class="number">0</span>);</div><div class="line">    <span class="keyword">if</span> (delay_flag == <span class="number">-1</span>)</div><div class="line">        <span class="keyword">goto</span> done;</div><div class="line">    <span class="keyword">if</span> (block)</div><div class="line">        new_delay_flag = delay_flag &amp; (~O_NONBLOCK);</div><div class="line">    <span class="keyword">else</span></div><div class="line">        new_delay_flag = delay_flag | O_NONBLOCK;</div><div class="line">    <span class="keyword">if</span> (new_delay_flag != delay_flag)</div><div class="line">        <span class="keyword">if</span> (fcntl(s-&gt;sock_fd, F_SETFL, new_delay_flag) == <span class="number">-1</span>)</div><div class="line">            <span class="keyword">goto</span> done;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">else</span> <span class="comment">/* MS_WINDOWS */</span></span></div><div class="line">    arg = !block;</div><div class="line">    <span class="keyword">if</span> (ioctlsocket(s-&gt;sock_fd, FIONBIO, &amp;arg) != <span class="number">0</span>)</div><div class="line">        <span class="keyword">goto</span> done;</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* MS_WINDOWS */</span></span></div><div class="line"></div><div class="line">    result = <span class="number">0</span>;</div><div class="line"></div><div class="line">  done:</div><div class="line">    ;  <span class="comment">/* necessary for --without-threads flag */</span></div><div class="line">    <span class="function">Py_END_ALLOW_THREADS</span></div><div class="line"></div><div class="line">    <span class="title">if</span> <span class="params">(result)</span> &#123;</div><div class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> MS_WINDOWS</span></div><div class="line">        PyErr_SetFromErrno(PyExc_OSError);</div><div class="line"><span class="meta">#<span class="meta-keyword">else</span></span></div><div class="line">        PyErr_SetExcFromWindowsErr(PyExc_OSError, WSAGetLastError());</div><div class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> result;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>socket的setblocking是通过fcntl实现的，这也是唯一跟告知内核的方式。</p>
+<p>OK，那我们再用fcntl的方式来验证下之前accept继承是否正确。</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> socket</div><div class="line"><span class="keyword">import</span> fcntl</div><div class="line">HOST = <span class="string">'127.0.0.1'</span></div><div class="line">PORT = <span class="number">50003</span></div><div class="line"></div><div class="line">s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</div><div class="line">s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)</div><div class="line"></div><div class="line"><span class="built_in">print</span> <span class="string">"server socket timeout"</span>, s.gettimeout()</div><div class="line"><span class="built_in">print</span> <span class="string">"server socket flags"</span>, fcntl.fcntl(s.fileno(), fcntl.F_GETFL)</div><div class="line"></div><div class="line"></div><div class="line">s.setblocking(<span class="number">0</span>)</div><div class="line"></div><div class="line"><span class="built_in">print</span> <span class="string">"server socket timeout"</span>, s.gettimeout()</div><div class="line"><span class="built_in">print</span> <span class="string">"server socket flags"</span>, fcntl.fcntl(s.fileno(), fcntl.F_GETFL)</div><div class="line"></div><div class="line">s.bind((HOST, PORT))</div><div class="line">s.<span class="built_in">listen</span>(<span class="number">1</span>)</div><div class="line"><span class="built_in">while</span> True:</div><div class="line">    <span class="built_in">try</span>:</div><div class="line">        conn, addr = s.accept()</div><div class="line"></div><div class="line">    except socket.error as e:</div><div class="line">        <span class="built_in">continue</span></div><div class="line">    <span class="built_in">print</span> <span class="string">"new socket timeout"</span>, conn.gettimeout()</div><div class="line">    <span class="built_in">print</span> <span class="string">"new socket flags"</span>,  fcntl.fcntl(conn.fileno(), fcntl.F_GETFL)</div><div class="line">    conn.<span class="built_in">close</span>()</div><div class="line">s.<span class="built_in">close</span>()</div></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">server socket timeout None<span class="built_in"></span></div><div class="line">server socket flags 2<span class="built_in"></span></div><div class="line">server socket timeout 0.0<span class="built_in"></span></div><div class="line">server socket flags 6</div><div class="line">new socket timeout None</div><div class="line">new socket flags 6</div></pre></td></tr></table></figure>
+<p>奇怪的事情发生了， accept继承了 listening socket 的文件状态标志位(file status flags)。这是咋回事？<br>之前说的这个结论不会继承是Linux 内核下说的(我本人的开发机是Mac)，Mac OS的内核实现可能不同。<br>又找了一台Ubuntu机器上试了试</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">server socket timeout None<span class="built_in"></span></div><div class="line">server socket flags 2<span class="built_in"></span></div><div class="line">server socket timeout 0.0<span class="built_in"></span></div><div class="line">server socket flags 2050</div><div class="line">new socket timeout None</div><div class="line">new socket flags 2</div></pre></td></tr></table></figure>
+<p>跟预期一致了，果然没有继承。</p>
+<p>看来不同的操作系统内核的实现有略微的不同，因此不要依赖于accept时的继承，把accept生成的socket也进行显式的修改。不论你是用setsockopt还是fcntl, 最好在accept生成的socket再显式来设置一次。</p>
+<p>推荐一个在线看Python源码的<a href="https://fossies.org/dox/Python-2.7.13/socketmodule_8c_source.html" target="_blank" rel="external">网站</a></p>
+
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
+        </div>
+      
+    </div>
+    <div class="article-info article-info-index">
       
       
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/06/30/webserver2/" class="archive-article-date">
-  	<time datetime="2015-06-30T08:18:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-30</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/30/webserver2/">web 服务器的秘密(二)</a>
-    </h1>
-  
+      
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/07/01/correct-an-error/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/06/25/socket2-md/" class="archive-article-date">
-  	<time datetime="2015-06-25T14:42:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/25/socket2-md/">深入socket(二)</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/06/18/socket/" class="archive-article-date">
-  	<time datetime="2015-06-18T08:18:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-18</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/18/socket/">深入socket(一)</a>
-    </h1>
+    <a href="/2017/07/01/block-chain/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          区块链
+        
+      </div>
+    </a>
   
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/03/17/webserver1/" class="archive-article-date">
-  	<time datetime="2015-03-17T14:11:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-17</time>
-</a>
-        </div>
-    	 
+    <a href="/2017/06/29/closewait/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">closewait</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/03/17/webserver1/">web 服务器的秘密(-)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/02/21/a-pixel-is-not-a-pixel/" class="archive-article-date">
-  	<time datetime="2015-02-21T09:23:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-02-21</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/02/21/a-pixel-is-not-a-pixel/">究竟是哪个像素</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/front-end/" class="article-tag-list-link color5">front-end</a>
-        		</li>
-      		
-		</ul>
-	</div>
+</nav>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
+
+
   
   
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -315,8 +320,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

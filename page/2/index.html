@@ -6,11 +6,11 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2015 | cc</title>
+  <title>cc</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta property="og:type" content="website">
 <meta property="og:title" content="cc">
-<meta property="og:url" content="http://yoursite.com/archives/2015/index.html">
+<meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="cc">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cc">
@@ -133,143 +133,150 @@
           <div id="js-content" class="content-ll">
             
   
-  
+    <article id="post-webserver1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/06/30/webserver2/" class="archive-article-date">
-  	<time datetime="2015-06-30T08:18:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-30</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/30/webserver2/">web 服务器的秘密(二)</a>
+      <a class="article-title" href="/2015/03/17/webserver1/">web 服务器的秘密(-)</a>
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/06/25/socket2-md/" class="archive-article-date">
-  	<time datetime="2015-06-25T14:42:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-25</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/25/socket2-md/">深入socket(二)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/06/18/socket/" class="archive-article-date">
-  	<time datetime="2015-06-18T08:18:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/18/socket/">深入socket(一)</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/03/17/webserver1/" class="archive-article-date">
+        
+        <a href="/2015/03/17/webserver1/" class="archive-article-date">
   	<time datetime="2015-03-17T14:11:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-17</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/03/17/webserver1/">web 服务器的秘密(-)</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="同步阻塞迭代模型"><a href="#同步阻塞迭代模型" class="headerlink" title="同步阻塞迭代模型"></a>同步阻塞迭代模型</h1><p>web 服务器的底层是socket。socket编程想必大家也是能信手拈来。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> socket</div><div class="line"></div><div class="line">http_response = <span class="string">'HTTP/1.1 200 OK\r\nConnection: Close\r\nContent-Length: 1\r\n\r\nA'</span></div><div class="line">server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</div><div class="line">server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)  <span class="comment"># TIME_WAIT</span></div><div class="line">server.bind((<span class="string">'0.0.0.0'</span>, <span class="number">9696</span>))</div><div class="line">server.listen(<span class="number">1</span>)</div><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    conn, addr = server.accept()</div><div class="line">    print(<span class="string">'Receive one connection'</span>)</div><div class="line">    data = conn.recv(<span class="number">4096</span>)</div><div class="line">    conn.send(http_response)</div><div class="line">    conn.close()</div><div class="line">    sys.exit()</div></pre></td></tr></table></figure>
+<p>先用wrk测一下当前的性能</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">wrk <span class="keyword">http</span>://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9696</span></div><div class="line">Running <span class="number">10</span>s test @ <span class="keyword">http</span>://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9696</span></div><div class="line">  <span class="number">2</span> threads <span class="keyword">and</span> <span class="number">10</span> connections</div><div class="line">  Thread Stats   Avg      Stdev     Max   +/- Stdev</div><div class="line">    Latency   <span class="number">370.22</span>us    <span class="number">7.01</span>ms <span class="number">243.17</span>ms   <span class="number">99.76</span>%</div><div class="line">    Req/Sec     <span class="number">2.56</span>k     <span class="number">2.38</span>k    <span class="number">6.24</span>k    <span class="number">46.67</span>%</div><div class="line">  <span class="number">16059</span> requests <span class="keyword">in</span> <span class="number">10.08</span>s, <span class="number">0.89</span>MB <span class="built_in">read</span></div><div class="line">  Socket errors: connect <span class="number">0</span>, <span class="built_in">read</span> <span class="number">218</span>, <span class="built_in">write</span> <span class="number">12</span>, timeout <span class="number">0</span></div><div class="line">Requests/<span class="built_in">sec</span>:   <span class="number">1593.65</span></div><div class="line">Transfer/<span class="built_in">sec</span>:     <span class="number">90.27</span>KB</div></pre></td></tr></table></figure>
+<p>10s中处理了16k+的请求<br>主要影响性能的地方是三处阻塞</p>
+<p>在server.accept() conn.recv() conn.send()会发生阻塞<br>如果没有客户端进行连接 s.accept() 会阻塞<br>没有收到客户端的数据流，s.recy() 会阻塞<br>如果输出缓冲区满了， s.send() 会阻塞  </p>
+<p>在 accept 阻塞的时候，无法调用 recv 接收客户端数据。在 recv 阻塞的时候也无法调用 accept 接受新的请求。所以它同时只能接受和处理一个请求，如果一个客户端发送数据的速度比较慢，会拖慢整个服务器响应的速度。</p>
+<p>我们在conn.recy前加一个<strong>time.sleep(1)</strong> ,模拟一下recv长时间阻塞的情况。这样处理一个请求最少用时变为1s。如果跟我们所想一致的话，10s内最多应该只能接收10个请求。</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">wrk <span class="keyword">http</span>://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9696</span></div><div class="line">Running <span class="number">10</span>s test @ <span class="keyword">http</span>://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9696</span></div><div class="line">  <span class="number">2</span> threads <span class="keyword">and</span> <span class="number">10</span> connections</div><div class="line">  Thread Stats   Avg      Stdev     Max   +/- Stdev</div><div class="line">    Latency     <span class="number">1.90</span>s     <span class="number">0.00</span>us   <span class="number">1.90</span>s   <span class="number">100.00</span>%</div><div class="line">    Req/Sec     <span class="number">0.00</span>      <span class="number">0.00</span>     <span class="number">0.00</span>    <span class="number">100.00</span>%</div><div class="line">  <span class="number">9</span> requests <span class="keyword">in</span> <span class="number">10.09</span>s, <span class="number">522.00</span>B <span class="built_in">read</span></div><div class="line">  Socket errors: connect <span class="number">0</span>, <span class="built_in">read</span> <span class="number">9</span>, <span class="built_in">write</span> <span class="number">0</span>, timeout <span class="number">8</span></div><div class="line">Requests/<span class="built_in">sec</span>:      <span class="number">0.89</span></div><div class="line">Transfer/<span class="built_in">sec</span>:      <span class="number">51.71</span>B</div></pre></td></tr></table></figure>
+<p>果然不出所料，依然是10s的测试时间，只接收到了9个请求。</p>
+<p>其实这种一次只能处理一个请求的服务器，称之为迭代服务器(iterative server)</p>
+<h1 id="多进程并发模型"><a href="#多进程并发模型" class="headerlink" title="多进程并发模型"></a>多进程并发模型</h1><p>在正常使用中，我们显然不希望整个服务器被单个请求长期占用，因为一个请求处理速度慢而拖累其余请求。而是希望能同时处理多个请求。最简单的方法就是每次fork一个子进程来服务每个请求。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> os</div><div class="line"><span class="keyword">import</span> socket</div><div class="line"><span class="keyword">import</span> time</div><div class="line"><span class="keyword">import</span> sys</div><div class="line"></div><div class="line">http_response = <span class="string">'HTTP/1.1 200 OK\r\nConnection: Close\r\nContent-Length: 1\r\n\r\nA'</span></div><div class="line">server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</div><div class="line">server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)  <span class="comment"># TIME_WAIT</span></div><div class="line">server.bind((<span class="string">'0.0.0.0'</span>, <span class="number">9696</span>))</div><div class="line">server.listen(<span class="number">1</span>)</div><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    conn, addr = server.accept()</div><div class="line">    pid = os.fork()</div><div class="line">    <span class="keyword">if</span> pid == <span class="number">0</span>:</div><div class="line">        time.sleep(<span class="number">1</span>)</div><div class="line">        data = conn.recv(<span class="number">4096</span>)</div><div class="line">        conn.send(http_response)</div><div class="line">        conn.close()</div><div class="line">        sys.exit()</div></pre></td></tr></table></figure>
+<p>还是time.sleep(1)，用wrk测试一下</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">wrk <span class="keyword">http</span>://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9696</span></div><div class="line">Running <span class="number">10</span>s test @ <span class="keyword">http</span>://<span class="number">127.0</span><span class="number">.0</span><span class="number">.1</span>:<span class="number">9696</span></div><div class="line">  <span class="number">2</span> threads <span class="keyword">and</span> <span class="number">10</span> connections</div><div class="line">  Thread Stats   Avg      Stdev     Max   +/- Stdev</div><div class="line">    Latency     <span class="number">1.00</span>s   <span class="number">744.20</span>us   <span class="number">1.00</span>s    <span class="number">69.23</span>%</div><div class="line">    Req/Sec     <span class="number">8.58</span>      <span class="number">7.46</span>    <span class="number">40.00</span>     <span class="number">53.23</span>%</div><div class="line">  <span class="number">91</span> requests <span class="keyword">in</span> <span class="number">10.06</span>s, <span class="number">5.15</span>KB <span class="built_in">read</span></div><div class="line">  Socket errors: connect <span class="number">0</span>, <span class="built_in">read</span> <span class="number">21</span>, <span class="built_in">write</span> <span class="number">5</span>, timeout <span class="number">0</span></div><div class="line">Requests/<span class="built_in">sec</span>:      <span class="number">9.05</span></div><div class="line">Transfer/<span class="built_in">sec</span>:     <span class="number">524.75</span>B</div></pre></td></tr></table></figure>
+<p>发现性能得到了极大提升，各个请求之间互不影响。</p>
+<p>当我们用wrk测试完毕后，保持server.py 不关闭，我们此时看一下9696端口的占用情况</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">lsof -i :9696</div><div class="line"></div><div class="line">COMMAND   PID <span class="built_in"> USER </span>  FD  <span class="built_in"> TYPE </span>            DEVICE SIZE/OFF NODE NAME</div><div class="line">Python  52789 cheng    3u  IPv4 0xfa93685560fec507      0t0  TCP *:9696 (LISTEN)</div><div class="line">Python  52789 cheng    5u  IPv4 0xfa93685560defc0f      0t0  TCP localhost:9696-&gt;localhost:59616 (CLOSED)</div></pre></td></tr></table></figure>
+<p>我们奇怪的发现此时有两个socket</p>
+<p>通过看此时TCP状态我们可以知道 第一个fd为3的socket，此时处于listen状态，应该是负责监听的socket，即我们上述代码里server变量，那么第二个fd为5的socket，就是某一个子进程没有正常关闭的socket了，也就是某个子进程的conn。<br>但是我们明明在每个子进程里都显示的执行conn.close()关闭子进程accept产生的socket了，并且代码执行过程中没有任何报错，那么这个fd为5的socket为何没有被关闭？<strong>问题1</strong><br>我们在 conn, addr = server.accept() 之后加上一段代码打印出 accept之后产生的socket的fd</p>
+<figure class="highlight tcl"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">import os</div><div class="line">import <span class="keyword">socket</span></div><div class="line">import <span class="keyword">time</span></div><div class="line">import sys</div><div class="line"></div><div class="line">http_response = <span class="string">'HTTP/1.1 200 OK\r\nConnection: Close\r\nContent-Length: 1\r\n\r\nA'</span></div><div class="line">server = <span class="keyword">socket</span>.<span class="keyword">socket</span>(<span class="keyword">socket</span>.AF_INET, <span class="keyword">socket</span>.SOCK_STREAM)</div><div class="line">server.setsockopt(<span class="keyword">socket</span>.SOL_SOCKET, <span class="keyword">socket</span>.SO_REUSEADDR, <span class="number">1</span>)  # TIME_WAIT</div><div class="line">server.bind((<span class="string">'0.0.0.0'</span>, <span class="number">9696</span>))</div><div class="line">server.listen(<span class="number">1</span>)</div><div class="line"></div><div class="line"><span class="keyword">while</span> True:</div><div class="line">    conn, addr = server.accept()</div><div class="line">    print(<span class="string">'conn fileno'</span>, conn.fileno())</div><div class="line">    <span class="keyword">pid</span> = os.fork()</div><div class="line">    <span class="keyword">if</span> <span class="keyword">pid</span> == <span class="number">0</span>:</div><div class="line">        <span class="keyword">time</span>.sleep(<span class="number">1</span>)</div><div class="line">        data = conn.recv(<span class="number">4096</span>)</div><div class="line">        conn.send(http_response)</div><div class="line">        conn.<span class="keyword">close</span>()</div><div class="line">        sys.<span class="keyword">exit</span>()</div></pre></td></tr></table></figure>
+<p>输出结果如下</p>
+<figure class="highlight sml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">(<span class="symbol">'conn</span> fileno', <span class="number">4</span>)</div><div class="line">(<span class="symbol">'conn</span> fileno', <span class="number">5</span>)</div><div class="line">(<span class="symbol">'conn</span> fileno', <span class="number">4</span>)</div><div class="line">(<span class="symbol">'conn</span> fileno', <span class="number">5</span>)</div><div class="line">(<span class="symbol">'conn</span> fileno', <span class="number">4</span>)</div><div class="line">(<span class="symbol">'conn</span> fileno', <span class="number">5</span>)</div><div class="line">...</div><div class="line">...</div><div class="line">...</div></pre></td></tr></table></figure>
+<p>fd 4，5交叉不断循环出现，不断重复使用fd4 和 fd5 的socket。对于不同的请求，每次在accept时都会新建socket来与之通信，难道会重复利用之前的socket？<strong>问题2</strong></p>
+<p>直接告诉答案<br>问题1，fd为5的socket在conn.close()是被关闭了的，但是关闭的是子进程里fd为5的socket，父进程里的并没被子进程关闭。<br>问题2， 是复用了，但是复用的不是socket，而是复用了文件描述符fd。</p>
+<p>如果如问题1的解释，那肯定又要问如果父进程的fd为5的socket没有被关闭，为何又能被之后的新的请求复用？ <strong>问题3</strong></p>
+<p>问题3，fd为5的socket在父进程中是没有被子进程的conn.close()关闭的，但是最终是被关闭了。被gc(垃圾回收)关闭了。</p>
+<p>详细解释：<br>问题1，在fork之后，父进程所有打开的fd(文件描述符)都会被复制到子进程中。<br><img src="http://7xkghb.com1.z0.glb.clouddn.com/blog-2.png" alt="blog-2.png"><br>因此，在子进程conn.close()，父进程的conn 并不会被关闭。<br>问题3<br>文件描述符创建时有几条规律： 1.从小到大创建。如果这个fd没有被释放，则+1 找下一个fd。2 如果当前释放的fd比上一次创建的fd要小，那么下一次创建时从这个释放的fd开始创建。<br>fd 0分配给了标准输入stdin，fd 1给了标准输出stdout，fd 2给了标准错误stderr。这三个是操作系统默认分配。因此我们的程序最小的fd 是 3。<br>fd 3 给了 server的 socket，<br><code>server = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</code><br>while 循环，第一次时创建fd为4的socket，变量conn指向这个socket，一直没有被关闭，第二次循环时创建fd为5的socket，变量conn指向这个fd为5的socket。此时fd为4的socket引用计数为0，除非gc，被回收。第三次循环，又从fd为4开始分配，fd为5释放。</p>
+<p>如果循环了偶数次，那么最后fd为5的socket则是最后被conn引用，不会被gc，fd为3的socket一直没有被关闭。<br>所以 <code>lsof -i :9696</code>会看到fd为3 和 fd为5的两个socket。</p>
+<p>问题2的解释会复杂一点。具体看之前写的这篇文章。</p>
+<p>对于多进程，python提供了更加友善的multiprocessing库</p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">import <span class="built_in">socket</span></div><div class="line">import multiprocessing</div><div class="line"></div><div class="line">response = <span class="string">'HTTP/1.1 200 OK\r\nConnection: Close\r\nContent-Length: 1\r\n\r\nA'</span></div><div class="line"></div><div class="line">server = <span class="built_in">socket</span>.<span class="built_in">socket</span>()</div><div class="line">server.setsockopt(<span class="built_in">socket</span>.SOL_SOCKET, <span class="built_in">socket</span>.SO_REUSEADDR, <span class="number">1</span>)</div><div class="line">server.bind((<span class="string">'0.0.0.0'</span>, <span class="number">9696</span>))</div><div class="line">server.listen(<span class="number">32</span>)</div><div class="line"></div><div class="line">def handler(conn, addr):</div><div class="line">    request = conn.recv(<span class="number">4096</span>)</div><div class="line">    conn.<span class="built_in">send</span>(response)</div><div class="line">    conn.<span class="built_in">close</span>()</div><div class="line"></div><div class="line"><span class="keyword">while</span> True:</div><div class="line">    conn, addr = server.accept()</div><div class="line">    <span class="built_in">process</span> = multiprocessing.Process(target=handler, args=(conn, addr))</div><div class="line">    <span class="built_in">process</span>.daemon = True</div><div class="line">    <span class="built_in">process</span>.<span class="built_in">start</span>()</div></pre></td></tr></table></figure>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/03/17/webserver1/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+
+
+
+
   
+    <article id="post-a-pixel-is-not-a-pixel" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/02/21/a-pixel-is-not-a-pixel/" class="archive-article-date">
-  	<time datetime="2015-02-21T09:23:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-02-21</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
     <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/02/21/a-pixel-is-not-a-pixel/">究竟是哪个像素</a>
+      <a class="article-title" href="/2015/02/21/a-pixel-is-not-a-pixel/">究竟是哪个像素</a>
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
+        
+        <a href="/2015/02/21/a-pixel-is-not-a-pixel/" class="archive-article-date">
+  	<time datetime="2015-02-21T09:23:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-02-21</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>我们在平时经常会听到手机分辨率是多少乘多少像素，在css里也会用到譬如<code>{width: 60px;}</code>。那么这里的像素是不是同一种像素呢？如果不是，那又分别指的是什么像素呢。</p>
+<p>#三种像素<br>准确的讲像素其实分为三种 </p>
+<ol>
+<li>Css Pixels</li>
+<li>Device Pixels</li>
+<li>Density-Independent-Pixels</li>
+</ol>
+<p>###Css Pixels<br>css 像素就是平时我们在css样式里写的比如<code>{width: 60px;}</code>。这里的60px便是60css像素。css像素是浏览器厂商为web开发者提供的一层抽象的像素层。css像素的尺寸是<strong>可以缩放</strong>的。<br>比如这个网页，黄色的侧边栏宽度是190像素。</p>
+<p><img src="/img/2015/02/21-01.png" alt="zoom css pixel"><br><!-- <img src="/blog/img/2015/02/21-01.png" width="100" height="100"> –&gt;</p>
+<p>现在我们放大浏览器</p>
+<p><img src="/img/2015/02/21-02.png" alt="zoom css pixel"></p>
+<p>我们很明显能感觉到黄色的侧边栏变宽了，但是它的css像素也变宽了吗？<strong>不</strong>，它的css样式依旧是<code>{width: 60px;}</code>。只不过每一个css像素变大了而已。</p>
+<p>###Device Pixels<br>设备像素，也就是物理像素是硬件层面的像素。<a href="http://www.apple.com/cn/iphone/compare/">Apple官网</a>所展示不同iPhone机型的分辨率，例如iPhone6 Plus的像素分辨率 1920*1080像素，这里指的便是Device Pixels(设备像素)。</p>
+<p>在最初非Retina屏幕时代，例如iPhone1 设备像素(宽)为320px，后来随着Retina屏幕的产生，屏幕拥有了越来越多的像素，例如iPhone 4 设备像素(宽)变成了640像素。但是屏幕的尺寸并没有变化(iPhone1 和 iPhone4 都是3.5英寸)，如果不做任何改变原本在iPhone1上显示正常的网页到了iPhone4上，便会变得特别特别小。比如之前在iPhone1上一张满屏的图片宽为320px，正好等于iPhone1的屏幕宽度。放到了iPhone4上，320px宽的图片，就只能占据屏幕的一半了。</p>
+<p>###Device Independent Pixel<br>为了解决这种情况，Google率先引入了 Device independent pixel 设备独立像素。这是继 css 像素层之后有一个抽象的像素层，它介于css像素层和设备像素层。</p>
+<p>#到底是那种像素？<br>说了这么多种像素，那么对于我们开发者而言，我们经常讲的是哪种像素呢？</p>
+<p>99%情况下我们谈论都是 Css Pixels(css像素)，除非你求的时屏幕尺寸(screen size)。</p>
+<p>#viewport<br>viewport 是用来限制<code><html></code> 标签的。</p>
+<p>这样描述可能还有点抽象。好吧，我们举个“栗子”。比如你的网页上有个侧边栏，css样式为 <code>width: 10%</code>。这时候当你缩放浏览器的时候，这个侧边栏的大小也会随之发生改变。其中的原理是什么？</p>
+<p>这个侧边栏总是获取它父元素宽度的10%，假定这个侧边栏除了<code><body></code>外没有别的任何上层嵌套元素。那这个侧边的宽度就是 <code><body></code> 宽度10%。那么<code><body></code>宽度是多少呢？</p>
+<p>一般来讲，嵌套元素占据他们父元素的宽度100%(暂时不考虑一些特殊情况)，因此<code><body></code>宽度就是<code><html></code>。那么<code><html></code>宽度多少？跟浏览器窗口一样宽。所以刚开始说的那个侧边的宽度实际上是<br>width = 10% <em> <code><body></code> = 10%</em><code><html></code> = 10%*browser-window。所以浏览器大小改变，侧边栏的大小也就会随之改变了。</p>
+<p>其实从理论上讲，<code><html></code>大小是受限于viewport的。<code><html></code> =100%<em> <code><html></code>。<br>换个角度讲，viewport 等于浏览器窗口(browser window)的宽度。viewport 不是HTML里的东西，不受css改变。只不过和<em>*桌面</em></em>浏览器窗口(browser window)拥有同样的高度与宽度。</p>
+<p>###两个viewport<br>如果之前有个桌面网页可以正常显示，其中右侧的正文距离左边 <code>padding-left: 34%</code></p>
+<p><img src="/img/2015/02/21-03.png" alt="padding-left"></p>
+<p>如果在手机浏览器上不做任何改变，就会变成这样子。</p>
+<p><img src="/img/2015/02/21-04.png" alt="zoom css pixel"></p>
+<p>全都挤在了一起，原因是手机浏览器远小于桌面浏览器的宽度，或者说手机上的viewport远小于桌面的viewport，34%的尺寸显然太窄了。</p>
+<p>为了解决这一问题，自然是想办法让手机上的viewport 变宽。于是浏览器厂商将viewport 一分为二，layout viewport 和 visual viewport。</p>
+<!-- #####layout viewport -->
+</p><p>layout viewport 就是css布局中使用的，<code>width: 10%</code> 说的就是 layout viewport的 10%。<br>visual viewport 就是用户实际能看到的视图大小，也就是用户在手机屏幕上能看到的大小。<br>给出图示<br><img src="/img/2015/02/21-05.png" alt="zoom css pixel"><br><img src="/img/2015/02/21-06.png" alt="zoom css pixel"></p>
+<p>你将一个桌面的网页放到手机上看，手机上屏幕只能显示部分网页，这个部分网页就是visual viewport，而这个网页实际的css布局大小就是 layout viewport。</p>
+<p>大多数浏览器设置了layout viewport = visual viewport。<br>这样大多数网页在手机上看的时候，是这样的。<br><img src="/img/2015/02/21-07.png" alt="zoom css pixel"></p>
+<p>这时候你可能为了要看清，就需要放大浏览器。当你每次缩放手机浏览器时，<strong>只会改变visual viewport，而layout viewport</strong>。为什么？试想一下，如果你每次缩放都要改变layout viewport的话，那么整张网页的css 布局都需要重新计算，这实在太浪费cpu和电池了。</p>
+<p>显然每次都需要缩放屏幕不利于用户在手机上浏览。为了解决这个问题，Apple提出了 viewport meta 标签，通过这个告知浏览器应该设置layout viewport多大。常用的是<code><meta name="“viewport”" content="“width" =="" device-width”=""> </code>，这里的device-width就是设备宽度，也就是我们之前的提到的device-independent-pixels。</p>
+<p>还记得我们之前讨论为什么提出了device-independent-pixels这个概念吗？就是因为手机的物理分辨率越来越大，如果我们不采用device-independent-pixels 而是device-pixels就会出现各种问题，iPhone1(320px设备像素)的 layout viewport是320px，iPhone4(640px设备像素)的layout viewport变成了640px。为了解决这问题，才提了device independent pixels概念，进而在 viewport meta标签采用了。</p>
+<p>#ReadMore<br><a href="http://www.quirksmode.org/mobile/viewports2.html" target="_blank" rel="external">A tale of two viewports</a></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
 	<div class="article-category tagcloud">
 		<i class="icon-book icon"></i>
 		<ul class="article-tag-list">
@@ -282,17 +289,96 @@
 	</div>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2015/02/21/a-pixel-is-not-a-pixel/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+
+
+
+
   
+    <article id="post-raspberry" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
   
-    </div></section>
+    <h1 itemprop="name">
+      <a class="article-title" href="/2014/05/19/raspberry/">raspberry</a>
+    </h1>
   
 
+        
+        <a href="/2014/05/19/raspberry/" class="archive-article-date">
+  	<time datetime="2014-05-19T14:15:10.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2014-05-19</time>
+</a>
+        
+      </header>
     
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>主要由两种方式 1. USB方式对接 2. GPIO方式对接</p>
+<h1 id="USB-方式对接"><a href="#USB-方式对接" class="headerlink" title="USB 方式对接"></a>USB 方式对接</h1><h2 id="Arduino-部分"><a href="#Arduino-部分" class="headerlink" title="Arduino 部分"></a>Arduino 部分</h2><p>将以下代码下载 arduino 中</p>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">void</span> <span class="built_in">setup</span>()&#123;</div><div class="line">  <span class="built_in">Serial</span>.<span class="built_in">begin</span>(<span class="number">9600</span>);</div><div class="line">&#125;</div><div class="line"><span class="keyword">void</span> <span class="built_in">loop</span>()&#123;</div><div class="line">  <span class="built_in">Serial</span>.<span class="built_in">println</span>(<span class="string">"Hello Pi"</span>);</div><div class="line">  <span class="built_in">delay</span>(<span class="number">2000</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="连接"><a href="#连接" class="headerlink" title="连接"></a>连接</h3><p>方式如图</p>
+<p><img src="http://7xkghb.com1.z0.glb.clouddn.com/blog/07/1.jpg" alt="Alt text"></p>
+<p>连接后之后查看是否正确识别</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">ls</span> <span class="string">/dev/tty</span>*</div></pre></td></tr></table></figure>
+<p>若列举出 <code>/dev/ttyACM0</code> 文件说明连接成功</p>
+<h2 id="Raspberry-pi-部分"><a href="#Raspberry-pi-部分" class="headerlink" title="Raspberry pi 部分"></a>Raspberry pi 部分</h2><p>首先安装两个库 RPi.GPIO serial<br>安装GPIO 模块<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">wget http:<span class="comment">//raspberry-gpio-python.googlecode.com/files/RPi.GPIO-0.3.1a.tar.gz (下载GPIO库)</span></div><div class="line">tar xvzf RPi<span class="selector-class">.GPIO-0</span>.<span class="number">3.1</span>a<span class="selector-class">.tar</span><span class="selector-class">.gz</span> </div><div class="line">cd RPi<span class="selector-class">.GPIO-0</span>.<span class="number">3.1</span>a </div><div class="line">sudo python setup<span class="selector-class">.py</span> install</div></pre></td></tr></table></figure></p>
+<p>安装serial</p>
+<figure class="highlight routeros"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo apt-<span class="builtin-name">get</span> install python-serial</div></pre></td></tr></table></figure>
+<p>打开python 交互环境</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; import serial</span></div><div class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; ser = serial.Serial(<span class="string">'/dev/ttyACM0'</span>, 9600)</span></div><div class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt; <span class="keyword">while</span> 1 :</span></div><div class="line"><span class="meta">&gt;</span><span class="bash">&gt;&gt;     ser.readline()</span></div></pre></td></tr></table></figure>
+<p>得到如下结果<br> <img src="http://7xkghb.com1.z0.glb.clouddn.com/blog/07/2.jpg" alt="Alt text"></p>
+<h2 id="树莓派向arduino-发送数据"><a href="#树莓派向arduino-发送数据" class="headerlink" title="树莓派向arduino 发送数据"></a>树莓派向arduino 发送数据</h2><p>以下代码下载到arduino<br><figure class="highlight arduino"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> ledPin = <span class="number">12</span>;</div><div class="line"><span class="keyword">void</span> <span class="built_in">setup</span>()&#123;</div><div class="line">    <span class="built_in">pinMode</span>(ledPin, <span class="literal">OUTPUT</span>);</div><div class="line">    <span class="built_in">Serial</span>.<span class="built_in">begin</span>(<span class="number">9600</span>);</div><div class="line">&#125;</div><div class="line"><span class="keyword">void</span> <span class="built_in">loop</span>()&#123;</div><div class="line">    <span class="built_in">if</span> (<span class="built_in">Serial</span>.<span class="built_in">available</span>()) &#123;</div><div class="line">    light(<span class="built_in">Serial</span>.<span class="built_in">read</span>() – ‘<span class="number">0</span>’);</div><div class="line">&#125;</div><div class="line"><span class="built_in">delay</span>(<span class="number">500</span>);</div><div class="line">&#125;</div><div class="line"><span class="keyword">void</span> light(<span class="keyword">int</span> n)&#123;</div><div class="line">    <span class="built_in">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123;</div><div class="line">        <span class="built_in">digitalWrite</span>(ledPin, <span class="literal">HIGH</span>);</div><div class="line">        <span class="built_in">delay</span>(<span class="number">100</span>);</div><div class="line">        <span class="built_in">digitalWrite</span>(ledPin, <span class="literal">LOW</span>);</div><div class="line">        <span class="built_in">delay</span>(<span class="number">100</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>在树莓派的python 交互环境继续输入\<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">&gt;&gt;</span>&gt; ser.write(<span class="string">'3'</span>)</div></pre></td></tr></table></figure></p>
+<p>此时你会看到 Arduino Led 灯闪三次<br><img src="http://7xkghb.com1.z0.glb.clouddn.com/blog/07/3.jpg" alt="Alt text"></p>
+<h2 id="GPIO方式"><a href="#GPIO方式" class="headerlink" title="GPIO方式"></a>GPIO方式</h2><p>原理就是 树莓派的pin8(GPIO14) pin10(GPIO15)与Arduion pin0(rx) pin1(tx)的进行对接<br><strong> 千万不要因为缺元件直接用线直连 </strong></p>
+<p>###需要准备的元件<br>GPIO 连接线<br><img src="http://7xkghb.com1.z0.glb.clouddn.com/blog/07/5.jpg" alt="Alt text"><br>GPIO 转接板<br><img src="http://7xkghb.com1.z0.glb.clouddn.com/blog/07/4.jpg" alt="Alt text"></p>
+<p>###实物连接图<br><img src="http://7xkghb.com1.z0.glb.clouddn.com/blog/07/6.jpg" alt="实物连接图"></p>
+<p>###原理说明<br>树莓派引脚图<br><img src="http://7xkghb.com1.z0.glb.clouddn.com/blog/07/7.png" alt="树莓派引脚图"></p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2014/05/19/raspberry/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+
+
+
+
+  
+  
+    <nav id="page-nav">
+      <a class="extend prev" rel="prev" href="/">&laquo; Prev</a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
+    </nav>
+  
 
 
           </div>
@@ -314,9 +400,9 @@
     <script>
 	var yiliaConfig = {
 		mathjax: false,
-		isHome: false,
+		isHome: true,
 		isPost: false,
-		isArchive: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,

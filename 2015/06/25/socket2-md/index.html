@@ -6,14 +6,21 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2015 | cc</title>
+  <title>深入socket(二) | cc</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="cc">
-<meta property="og:url" content="http://yoursite.com/archives/2015/index.html">
+  <meta name="description" content="接着sock_create继续展开下去 1234int sock_create(int family, int type, int protocol, struct socket **res)&amp;#123;	return __sock_create(family, type, protocol, res, 0);&amp;#125; 1234567891011121314151617181920212223">
+<meta property="og:type" content="article">
+<meta property="og:title" content="深入socket(二)">
+<meta property="og:url" content="http://yoursite.com/2015/06/25/socket2-md/index.html">
 <meta property="og:site_name" content="cc">
+<meta property="og:description" content="接着sock_create继续展开下去 1234int sock_create(int family, int type, int protocol, struct socket **res)&amp;#123;	return __sock_create(family, type, protocol, res, 0);&amp;#125; 1234567891011121314151617181920212223">
+<meta property="og:image" content="http://7xkghb.com1.z0.glb.clouddn.com/blog-3.png">
+<meta property="og:image" content="http://7xkghb.com1.z0.glb.clouddn.com/blog-4.png">
+<meta property="og:updated_time" content="2017-06-25T14:48:59.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cc">
+<meta name="twitter:title" content="深入socket(二)">
+<meta name="twitter:description" content="接着sock_create继续展开下去 1234int sock_create(int family, int type, int protocol, struct socket **res)&amp;#123;	return __sock_create(family, type, protocol, res, 0);&amp;#125; 1234567891011121314151617181920212223">
+<meta name="twitter:image" content="http://7xkghb.com1.z0.glb.clouddn.com/blog-3.png">
   
     <link rel="alternative" href="/atom.xml" title="cc" type="application/atom+xml">
   
@@ -131,168 +138,167 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-socket2-md" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/06/30/webserver2/" class="archive-article-date">
-  	<time datetime="2015-06-30T08:18:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-30</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/30/webserver2/">web 服务器的秘密(二)</a>
+    <h1 class="article-title" itemprop="name">
+      深入socket(二)
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/06/25/socket2-md/" class="archive-article-date">
+        
+        <a href="/2015/06/25/socket2-md/" class="archive-article-date">
   	<time datetime="2015-06-25T14:42:29.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-25</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/25/socket2-md/">深入socket(二)</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>接着<code>sock_create</code>继续展开下去</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> sock_create(<span class="keyword">int</span> family, <span class="keyword">int</span> <span class="keyword">type</span>, <span class="keyword">int</span> protocol, <span class="keyword">struct</span> socket **res)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">return</span> __sock_create(family, <span class="keyword">type</span>, protocol, res, <span class="number">0</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line">static <span class="keyword">int</span> __sock_create(<span class="keyword">int</span> family, <span class="keyword">int</span> <span class="keyword">type</span>, <span class="keyword">int</span> protocol, <span class="keyword">struct</span> socket **res, <span class="keyword">int</span> kern)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">int</span> err;</div><div class="line">	<span class="keyword">struct</span> socket *sock;</div><div class="line">	...</div><div class="line">	...</div><div class="line">	...</div><div class="line"><span class="comment">/*</span></div><div class="line"> *	Allocate the socket and allow the family to set things up. if</div><div class="line"> *	the protocol is 0, the family is instructed to select an appropriate</div><div class="line"> *	default.</div><div class="line"> */</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (!(sock = sock_alloc())) &#123;</div><div class="line">		printk(KERN_WARNING <span class="string">"socket: no more sockets\n"</span>);</div><div class="line">		err = -ENFILE;		<span class="comment">/* Not exactly a match, but its the</span></div><div class="line">					   closest posix thing */</div><div class="line">		<span class="keyword">goto</span> out;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	sock-&gt;<span class="keyword">type</span>  = <span class="keyword">type</span>;</div><div class="line">	</div><div class="line">	...</div><div class="line">	...</div><div class="line">	...</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>一步一步调用到<strong>sock_alloc</strong>方法</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">socket</span></span> *sock_alloc(void)</div><div class="line">&#123;</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">inode</span></span> * inode;</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span></span> * sock;</div><div class="line"></div><div class="line">	inode = new_inode(sock_mnt-&gt;mnt_sb);</div><div class="line">	<span class="keyword">if</span> (!inode)</div><div class="line">		<span class="keyword">return</span> NULL;</div><div class="line"></div><div class="line">	sock = SOCKET_I(inode);<span class="comment">// 通过inode查找对应的socket</span></div><div class="line"></div><div class="line">	inode-&gt;i_mode = S_IFSOCK|S_IRWXUGO;</div><div class="line">	inode-&gt;i_uid = current-&gt;fsuid;</div><div class="line">	inode-&gt;i_gid = current-&gt;fsgid;</div><div class="line"></div><div class="line">	get_cpu_var(sockets_in_use)++;</div><div class="line">	put_cpu_var(sockets_in_use);</div><div class="line">	<span class="keyword">return</span> sock;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里会分配一个inode的结构体和</p>
+<figure class="highlight lisp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">struct inode *new_inode(<span class="name">struct</span> super_block *sb)</div><div class="line">&#123;</div><div class="line">	static unsigned long last_ino;</div><div class="line">	struct inode * inode<span class="comment">;</span></div><div class="line"></div><div class="line">	spin_lock_prefetch(<span class="name">&amp;inode_lock</span>)<span class="comment">;</span></div><div class="line">	</div><div class="line">	inode = alloc_inode(<span class="name">sb</span>)<span class="comment">;</span></div><div class="line">	if (<span class="name">inode</span>) &#123;</div><div class="line">		spin_lock(<span class="name">&amp;inode_lock</span>)<span class="comment">;</span></div><div class="line">		inodes_stat.nr_inodes++<span class="comment">;</span></div><div class="line">		list_add(<span class="name">&amp;inode-&gt;i_list</span>, <span class="symbol">&amp;inode_in_use</span>)<span class="comment">;</span></div><div class="line">		list_add(<span class="name">&amp;inode-&gt;i_sb_list</span>, <span class="symbol">&amp;sb-&gt;s_inodes</span>)<span class="comment">;</span></div><div class="line">		inode-&gt;i_ino = ++last_ino<span class="comment">;</span></div><div class="line">		inode-&gt;i_state = <span class="number">0</span><span class="comment">;</span></div><div class="line">		spin_unlock(<span class="name">&amp;inode_lock</span>)<span class="comment">;</span></div><div class="line">	&#125;</div><div class="line">	return inode<span class="comment">;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">inode</span></span> *alloc_inode(<span class="class"><span class="keyword">struct</span> <span class="title">super_block</span></span> *sb)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">address_space_operations</span></span> empty_aops;</div><div class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">inode_operations</span></span> empty_iops;</div><div class="line">	<span class="keyword">static</span> <span class="class"><span class="keyword">struct</span> <span class="title">file_operations</span></span> empty_fops;</div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">inode</span></span> *inode;</div><div class="line"></div><div class="line">	<span class="keyword">if</span> (sb-&gt;s_op-&gt;alloc_inode)</div><div class="line">		inode = sb-&gt;s_op-&gt;alloc_inode(sb);<span class="comment">//如果指定了创建socket的方法，则用系统指定方法创建</span></div><div class="line">	<span class="keyword">else</span> </div><div class="line">		inode = (<span class="class"><span class="keyword">struct</span> <span class="title">inode</span></span> *) kmem_cache_alloc(inode_cachep, SLAB_KERNEL);</div><div class="line">	</div><div class="line">	...</div><div class="line">	...</div><div class="line">	...</div><div class="line"></div><div class="line">		<span class="keyword">return</span> inode;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里补充一点，内核初始化时，会调用 <code>kernel_init()</code><br>当初始化socket部分时，会调用<code>core_initcall(sock_init);</code><br>在初始化时，会有一系列操作, 从而系统会指定创建socket对应的inode方法</p>
+<figure class="highlight nix"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">static struct super_operations <span class="attr">sockfs_ops</span> = &#123;</div><div class="line">	.<span class="attr">alloc_inode</span> =	sock_alloc_inode,</div><div class="line">	.<span class="attr">destroy_inode</span> =sock_destroy_inode,</div><div class="line">	.<span class="attr">statfs</span> =	simple_statfs,</div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>指定创建inode的方法为 <code> sock_alloc_inode </code></p>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line">static struct inode *sock_alloc_inode(struct super_block *<span class="keyword">sb)</span></div><div class="line">&#123;</div><div class="line">	struct socket_alloc *<span class="keyword">ei;</span></div><div class="line">	<span class="keyword">ei </span>= (struct socket_alloc *)kmem_cache_alloc(sock_inode_cachep, SLAB_KERNEL)<span class="comment">;</span></div><div class="line">	if (!<span class="keyword">ei)</span></div><div class="line">		return NULL<span class="comment">;</span></div><div class="line">	init_waitqueue_head(&amp;<span class="keyword">ei-&gt;socket.wait);</span></div><div class="line">	</div><div class="line">	<span class="keyword">ei-&gt;socket.fasync_list </span>= NULL<span class="comment">;</span></div><div class="line">	<span class="keyword">ei-&gt;socket.state </span>= SS_UNCONNECTED<span class="comment">;</span></div><div class="line">	<span class="keyword">ei-&gt;socket.flags </span>= <span class="number">0</span><span class="comment">;</span></div><div class="line">	<span class="keyword">ei-&gt;socket.ops </span>= NULL<span class="comment">;</span></div><div class="line">	<span class="keyword">ei-&gt;socket.sk </span>= NULL<span class="comment">;</span></div><div class="line">	<span class="keyword">ei-&gt;socket.file </span>= NULL<span class="comment">;</span></div><div class="line">	<span class="keyword">ei-&gt;socket.flags </span>= <span class="number">0</span><span class="comment">;</span></div><div class="line"></div><div class="line">	return &amp;<span class="keyword">ei-&gt;vfs_inode;</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里实际创建了一个 <code> socket_alloc </code>结构体，把成员inode返回了。</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">socket_alloc</span> &#123;</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">socket</span> <span class="title">socket</span>;</span></div><div class="line">	<span class="class"><span class="keyword">struct</span> <span class="title">inode</span> <span class="title">vfs_inode</span>;</span></div><div class="line">&#125;;</div></pre></td></tr></table></figure>
+<p>之后就可以通过<code> SOCKET_I </code> 和 <code>SOCK_INODE</code>来找到inode 对应的socket和socket对应的inode了</p>
+<figure class="highlight rust"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> inline <span class="class"><span class="keyword">struct</span> <span class="title">socket</span></span> *SOCKET_I(<span class="class"><span class="keyword">struct</span> <span class="title">inode</span></span> *inode)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">return</span> &amp;container_of(inode, <span class="class"><span class="keyword">struct</span> <span class="title">socket_alloc</span></span>, vfs_inode)-&gt;socket;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="keyword">static</span> inline <span class="class"><span class="keyword">struct</span> <span class="title">inode</span></span> *SOCK_INODE(<span class="class"><span class="keyword">struct</span> <span class="title">socket</span></span> *socket)</div><div class="line">&#123;</div><div class="line">	<span class="keyword">return</span> &amp;container_of(socket, <span class="class"><span class="keyword">struct</span> <span class="title">socket_alloc</span></span>, socket)-&gt;vfs_inode;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>到目前为止我们的函数执行过程如下图所示</p>
+<p><img src="http://7xkghb.com1.z0.glb.clouddn.com/blog-3.png" alt="blog-3.png"></p>
+<p>到目前位置已知的数据结构和之间的对应关系为</p>
+<p><img src="http://7xkghb.com1.z0.glb.clouddn.com/blog-4.png" alt="blog-4.png"></p>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我吃糖果<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2015/06/25/socket2-md/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/06/18/socket/" class="archive-article-date">
-  	<time datetime="2015-06-18T08:18:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-18</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/06/18/socket/">深入socket(一)</a>
-    </h1>
-  
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/03/17/webserver1/" class="archive-article-date">
-  	<time datetime="2015-03-17T14:11:47.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-03-17</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/03/17/webserver1/">web 服务器的秘密(-)</a>
-    </h1>
+    <a href="/2015/06/30/webserver2/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          web 服务器的秘密(二)
+        
+      </div>
+    </a>
   
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
   
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/02/21/a-pixel-is-not-a-pixel/" class="archive-article-date">
-  	<time datetime="2015-02-21T09:23:04.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-02-21</time>
-</a>
-        </div>
-    	 
+    <a href="/2015/06/18/socket/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">深入socket(一)</div>
+      <i class="icon-circle-right"></i>
+    </a>
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/02/21/a-pixel-is-not-a-pixel/">究竟是哪个像素</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-	<div class="article-category tagcloud">
-		<i class="icon-book icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="/categories/front-end/" class="article-tag-list-link color5">front-end</a>
-        		</li>
-      		
-		</ul>
-	</div>
+</nav>
 
 
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
+
+
+
   
   
-    </div></section>
   
 
-    
+  
+
+  
 
 
           </div>
@@ -315,8 +321,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
