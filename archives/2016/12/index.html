@@ -6,18 +6,14 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>web 服务器的秘密(二) | cc</title>
+  <title>Archives: 2016/12 | cc</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="进程创建上下文太消耗资源，我们换成多线程我们同样使用python封装的更高级的线程库threading 1234567891011121314151617181920import socketimport threadingresponse = &apos;HTTP/1.1 200 OK\r\nConnection: Close\r\nContent-Length: 1\r\n\r\nA&apos;server =">
-<meta property="og:type" content="article">
-<meta property="og:title" content="web 服务器的秘密(二)">
-<meta property="og:url" content="http://yoursite.com/2015/06/30/webserver2/index.html">
+  <meta property="og:type" content="website">
+<meta property="og:title" content="cc">
+<meta property="og:url" content="http://yoursite.com/archives/2016/12/index.html">
 <meta property="og:site_name" content="cc">
-<meta property="og:description" content="进程创建上下文太消耗资源，我们换成多线程我们同样使用python封装的更高级的线程库threading 1234567891011121314151617181920import socketimport threadingresponse = &apos;HTTP/1.1 200 OK\r\nConnection: Close\r\nContent-Length: 1\r\n\r\nA&apos;server =">
-<meta property="og:updated_time" content="2017-07-11T02:58:41.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="web 服务器的秘密(二)">
-<meta name="twitter:description" content="进程创建上下文太消耗资源，我们换成多线程我们同样使用python封装的更高级的线程库threading 1234567891011121314151617181920import socketimport threadingresponse = &apos;HTTP/1.1 200 OK\r\nConnection: Close\r\nContent-Length: 1\r\n\r\nA&apos;server =">
+<meta name="twitter:title" content="cc">
   
     <link rel="alternative" href="/atom.xml" title="cc" type="application/atom+xml">
   
@@ -135,172 +131,49 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            <article id="post-webserver2" class="article article-type-post " itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
+            
   
-    <h1 class="article-title" itemprop="name">
-      web 服务器的秘密(二)
+  
+    
+    
+      
+      
+      <section class="archives-wrap">
+        <div class="archive-year-wrap">
+          <a href="/archives/2016" class="archive-year">2016</a>
+        </div>
+        <div class="archives">
+    
+    <article class="archive-article archive-type-post">
+  <div class="archive-article-inner">
+    <header class="archive-article-header">
+      	<div class="article-meta">
+	      	<a href="/2016/12/06/reuse-and-timewait/" class="archive-article-date">
+  	<time datetime="2016-12-06T10:27:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-06</time>
+</a>
+        </div>
+    	 
+  
+    <h1 itemprop="name">
+      <a class="archive-article-title" href="/2016/12/06/reuse-and-timewait/">reuse-and-timewait</a>
     </h1>
   
 
-        
-        <a href="/2015/06/30/webserver2/" class="archive-article-date">
-  	<time datetime="2015-06-30T08:18:38.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-06-30</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>进程创建上下文太消耗资源，我们换成多线程<br>我们同样使用python封装的更高级的线程库threading</p>
-<figure class="highlight lasso"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> socket</div><div class="line"><span class="keyword">import</span> threading</div><div class="line"></div><div class="line">response = <span class="string">'HTTP/1.1 200 OK\r\nConnection: Close\r\nContent-Length: 1\r\n\r\nA'</span></div><div class="line"></div><div class="line">server = socket.socket()</div><div class="line">server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)</div><div class="line">server.bind((<span class="string">'0.0.0.0'</span>, <span class="number">9696</span>))</div><div class="line">server.listen(<span class="number">1</span>)</div><div class="line"></div><div class="line">def handler(conn, addr):</div><div class="line">    request = conn.recv(<span class="number">4096</span>)</div><div class="line">    conn.send(response)</div><div class="line">    conn.close()</div><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="literal">True</span>:</div><div class="line">    conn, addr = server.accept()</div><div class="line">    <span class="keyword">thread</span> = threading.<span class="keyword">Thread</span>(target=handler, args=(conn, addr))</div><div class="line">    <span class="keyword">thread</span>.daemon = <span class="literal">True</span></div><div class="line">    <span class="keyword">thread</span>.start()</div></pre></td></tr></table></figure>
-<p>不论是多进程还是多线程基本思想都是为每一个到来的连接创建一个新的进程或线程，然后在次进程或线程内完成该连接的请求响应。 所以TPC与PPC的使用场景是一样的，但创建线程的开销远低于创建进程的开销。 两者的缺点也是一样的，一个程序创建的子进程或子线程总是有上限的，且当连接多了之后，大量的进程/线程间切换需要大量的开销；通常这两个方案能处理的最大连接数都不会高，显然跟现在的web服务器相去甚远。</p>
-<p>好，既然我们发现每来一个请求创建一个进程/线程，会把大把时间<br>消耗在创建进程/线程和进程/线程上下文切换中。并且如果我们每个线程处理的速度慢于线程创建速度，会造成线程数不断增长。当达到一定数量时，由于os限制无法产生更多线程，例如多线程方式则会报错<br><code>thread.error: can’t start new thread</code> 已生成的线程数量太多了，无法创建更多的线程了。</p>
-<p>由于以上的种种原因，我们不得不控制产生线程的数量，这就用到了线程池。“线程池”旨在减少创建和销毁线程的频率，其维持一定合理数量的线程，并让空闲的线程重新承担新的执行任务。“连接池”维持连接的缓存池，尽量重用已有的连接、减少创建和关闭连接的频率。这两种技术都可以很好的降低系统开销，都被广泛应用很多大型系统，如 websphere、tomcat。</p>
-<figure class="highlight awk"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line">import socket</div><div class="line">import threading</div><div class="line"></div><div class="line">response = <span class="string">'HTTP/1.1 200 OK\r\nConnection: Close\r\nContent-Length: 1\r\n\r\nA'</span></div><div class="line"></div><div class="line">server = socket.socket()</div><div class="line">server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)</div><div class="line">server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEPORT, <span class="number">1</span>)</div><div class="line">server.bind((<span class="string">'0.0.0.0'</span>, <span class="number">9696</span>))</div><div class="line">server.listen(<span class="number">1</span>)</div><div class="line"></div><div class="line">def handler():</div><div class="line">    <span class="keyword">while</span> True:</div><div class="line">        conn, addr = server.accept()</div><div class="line">        request = conn.recv(<span class="number">4096</span>)</div><div class="line">        conn.send(response)</div><div class="line">        conn.close()</div><div class="line">    thread.<span class="keyword">exit</span>()</div><div class="line"></div><div class="line">threads = []</div><div class="line"></div><div class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">0</span>, <span class="number">4</span>):</div><div class="line">    thread = threading.Thread(target=handler, args=())</div><div class="line">    thread.start()</div><div class="line">    threads.append(thread)</div><div class="line"></div><div class="line"><span class="keyword">for</span> thread <span class="keyword">in</span> threads:</div><div class="line">    thread.join()</div></pre></td></tr></table></figure>
-<p>“线程池”技术也只是在一定程度上缓解了频繁调用 IO 接口带来的资源占用。而且，所谓“池”始终有其上限，当请求大大超过上限时，“池”构成的系统对外界的响应并不比没有池的时候效果好多少。所以使用“池”必须考虑其面临的响应规模，并根据响应规模调整“池”的大小。</p>
-<p>之前的种种原因都是因为会发生阻塞才想出的方案，如果使用非阻塞的方式呢？</p>
-<p>非阻塞忙轮询</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> socket</div><div class="line"><span class="keyword">import</span> copy</div><div class="line">response = <span class="string">'HTTP/1.1 200 OK\r\nConnection: Close\r\nContent-Length: 1\r\n\r\nA'</span></div><div class="line"></div><div class="line">server = socket.socket()</div><div class="line">server.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)</div><div class="line">server.setblocking(<span class="keyword">False</span>)</div><div class="line">server.bind((<span class="string">'0.0.0.0'</span>, <span class="number">9696</span>))</div><div class="line">server.listen(<span class="number">1</span>)</div><div class="line"></div><div class="line">conns = []</div><div class="line"></div><div class="line"><span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">    <span class="keyword">try</span>:</div><div class="line">        conn, addr = server.accept()</div><div class="line">        conns.append(conn)</div><div class="line">    <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">        <span class="keyword">pass</span></div><div class="line">    <span class="keyword">for</span> conn <span class="keyword">in</span> copy.copy(conns):</div><div class="line">        <span class="keyword">try</span>:</div><div class="line">            request = conn.recv(<span class="number">4096</span>)</div><div class="line">            conn.send(response)</div><div class="line">            conns.remove(conn)</div><div class="line">            conn.close()</div><div class="line">        <span class="keyword">except</span> Exception <span class="keyword">as</span> e:</div><div class="line">            <span class="keyword">pass</span></div></pre></td></tr></table></figure>
-<p>我们只要不停的把所有socket从头到尾问一遍，又从头开始。这样就可以处理多个socket了，但这样的做法显然不好，因为如果所有的socket都没有数据，那么只会白白浪费CPU。</p>
-<p>select</p>
-<p>为了避免CPU空转，可以引进了一个代理（一开始有一位叫做select的代理，后来又有一位叫做poll的代理，不过两者的本质是一样的）。这个代理比较厉害，可以同时观察许多流的I/O事件，在空闲的时候，会把当前线程阻塞掉，当有一个或多个流有I/O事件时，就从阻塞态中醒来，于是我们的程序就会轮询一遍所有的流（于是我们可以把“忙”字去掉了）。代码长这样:</p>
-<p>while true {<br>    select(streams[])<br>    for i in streams[] {<br>        if i has data<br>            read until unavailable<br>    }<br>}</p>
-<p>于是，如果没有I/O事件产生，我们的程序就会阻塞在select处。但是依然有个问题，我们从select那里仅仅知道了，有I/O事件发生了，但却并不知道是那几个流（可能有一个，多个，甚至全部），我们只能无差别轮询所有流，找出能读出数据，或者写入数据的流，对他们进行操作。</p>
-<p>但是使用select，我们有O(n)的无差别轮询复杂度，同时处理的流越多，没一次无差别轮询时间就越长。</p>
-<p>当时这样仍然会每次把所有的socket流轮询一遍，有没有一种方法可以只让我们轮询可以被操作的流呢？Epoll呼之欲出</p>
-<p>epoll 可以理解为event poll，不同于忙轮询和无差别轮询，epoll之会把哪个流发生了怎样的I/O事件通知我们。此时我们对这些流的操作都是有意义的。（复杂度降低到了O(k)，k为产生I/O事件的流的个数，也有认为O(1)的[原文为O(1)，但实际上O(k)更为准确]）</p>
-<p>一个epoll模式的代码大概的样子是：</p>
-<figure class="highlight applescript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">while</span> <span class="literal">true</span> &#123;</div><div class="line">	active_stream[] = epoll_wait(epollfd)</div><div class="line">	<span class="keyword">for</span> i <span class="keyword">in</span> active_stream[] &#123;</div><div class="line">		<span class="built_in">read</span> <span class="keyword">or</span> <span class="built_in">write</span> till unavailable</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<figure class="highlight oxygene"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">import socket, <span class="keyword">select</span></div><div class="line">EOL1 = b<span class="string">'\n\n'</span></div><div class="line">EOL2 = b<span class="string">'\n\r\n'</span></div><div class="line">response  = b<span class="string">'HTTP/1.0 200 OK\r\nDate: Mon, 1 Jan 1996 01:01:01 GMT\r\n'</span></div><div class="line">response += b<span class="string">'Content-Type: text/plain\r\nContent-Length: 13\r\n\r\n'</span></div><div class="line">response += b<span class="string">'Hello, world!'</span></div><div class="line"></div><div class="line">serversocket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)</div><div class="line">serversocket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, <span class="number">1</span>)</div><div class="line">serversocket.bind((<span class="string">'0.0.0.0'</span>, <span class="number">8080</span>))</div><div class="line">serversocket.listen(<span class="number">1</span>)</div><div class="line">serversocket.setblocking(<span class="number">0</span>)</div><div class="line">serversocket.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, <span class="number">1</span>)</div><div class="line"></div><div class="line">epoll = <span class="keyword">select</span>.epoll()</div><div class="line">epoll.register(serversocket.fileno(), <span class="keyword">select</span>.EPOLLIN)</div><div class="line"></div><div class="line"><span class="keyword">try</span>:</div><div class="line">   connections = <span class="comment">&#123;&#125;</span>; requests = <span class="comment">&#123;&#125;</span>; responses = <span class="comment">&#123;&#125;</span></div><div class="line">   <span class="keyword">while</span> <span class="keyword">True</span>:</div><div class="line">      events = epoll.poll(<span class="number">1</span>)</div><div class="line">      <span class="keyword">for</span> fileno, <span class="keyword">event</span> <span class="keyword">in</span> events:</div><div class="line">         <span class="keyword">if</span> fileno == serversocket.fileno():</div><div class="line">            connection, address = serversocket.accept()</div><div class="line">            connection.setblocking(<span class="number">0</span>)</div><div class="line">            epoll.register(connection.fileno(), <span class="keyword">select</span>.EPOLLIN)</div><div class="line">            connections[connection.fileno()] = connection</div><div class="line">            requests[connection.fileno()] = b<span class="string">''</span></div><div class="line">            responses[connection.fileno()] = response</div><div class="line">         elif <span class="keyword">event</span> &amp; <span class="keyword">select</span>.EPOLLIN:</div><div class="line">            requests[fileno] += connections[fileno].recv(<span class="number">1024</span>)</div><div class="line">            <span class="keyword">if</span> EOL1 <span class="keyword">in</span> requests[fileno] <span class="keyword">or</span> EOL2 <span class="keyword">in</span> requests[fileno]:</div><div class="line">               epoll.modify(fileno, <span class="keyword">select</span>.EPOLLOUT)</div><div class="line">               print(<span class="string">'-'</span>*<span class="number">40</span> + <span class="string">'\n'</span> + requests[fileno].decode()[:-<span class="number">2</span>])</div><div class="line">         elif <span class="keyword">event</span> &amp; <span class="keyword">select</span>.EPOLLOUT:</div><div class="line">            byteswritten = connections[fileno].send(responses[fileno])</div><div class="line">            responses[fileno] = responses[fileno][byteswritten:]</div><div class="line">            <span class="keyword">if</span> len(responses[fileno]) == <span class="number">0</span>:</div><div class="line">               epoll.modify(fileno, <span class="number">0</span>)</div><div class="line">               connections[fileno].shutdown(socket.SHUT_RDWR)</div><div class="line">         elif <span class="keyword">event</span> &amp; <span class="keyword">select</span>.EPOLLHUP:</div><div class="line">            epoll.unregister(fileno)</div><div class="line">            connections[fileno].close()</div><div class="line">            del connections[fileno]</div><div class="line"><span class="keyword">finally</span>:</div><div class="line">   epoll.unregister(serversocket.fileno())</div><div class="line">   epoll.close()</div><div class="line">   serversocket.close()</div></pre></td></tr></table></figure>
-      
+        <div class="article-info info-on-right">
+          
+          
 
-      
-        <div class="page-reward">
-          <a href="javascript:;" class="page-reward-btn tooltip-top">
-            <div class="tooltip tooltip-east">
-            <span class="tooltip-item">
-              赏
-            </span>
-            <span class="tooltip-content">
-              <span class="tooltip-text">
-                <span class="tooltip-inner">
-                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我喝咖啡<i class="icon icon-quo-right"></i></p>
-                  <div class="reward-box">
-                    
-                    <div class="reward-box-item">
-                      <img class="reward-img" src="http://7xkghb.com1.z0.glb.clouddn.com/Alipay.jpg">
-                      <span class="reward-type">支付宝</span>
-                    </div>
-                    
-                    
-                  </div>
-                </span>
-              </span>
-            </span>
-          </div>
-          </a>
         </div>
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-      
-
-      
-
-      
-        
-<div class="share-btn share-icons tooltip-left">
-  <div class="tooltip tooltip-east">
-    <span class="tooltip-item">
-      <a href="javascript:;" class="share-sns share-outer">
-        <i class="icon icon-share"></i>
-      </a>
-    </span>
-    <span class="tooltip-content">
-      <div class="share-wrap">
-        <div class="share-icons">
-          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
-            <i class="icon icon-weibo"></i>
-          </a>
-          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
-            <i class="icon icon-weixin"></i>
-          </a>
-          <a class="qq share-sns" href="javascript:;" data-type="qq">
-            <i class="icon icon-qq"></i>
-          </a>
-          <a class="douban share-sns" href="javascript:;" data-type="douban">
-            <i class="icon icon-douban"></i>
-          </a>
-          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
-            <i class="icon icon-qzone"></i>
-          </a>
-          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
-            <i class="icon icon-facebook"></i>
-          </a>
-          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
-            <i class="icon icon-twitter"></i>
-          </a>
-          <a class="google share-sns" href="javascript:;" data-type="google">
-            <i class="icon icon-google"></i>
-          </a>
-        </div>
-      </div>
-    </span>
-  </div>
-</div>
-
-<div class="page-modal wx-share js-wx-box">
-    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <div class="wx-qrcode">
-      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2015/06/30/webserver2/" alt="微信分享二维码">
-    </div>
-</div>
-
-<div class="mask js-mask"></div>
-      
-      <div class="clearfix"></div>
-    </div>
+        <div class="clearfix"></div>
+    </header>
   </div>
 </article>
-
-  
-<nav id="article-nav">
-  
-    <a href="/2015/10/01/select/" id="article-nav-newer" class="article-nav-link-wrap">
-      <i class="icon-circle-left"></i>
-      <div class="article-nav-title">
-        
-          深入select
-        
-      </div>
-    </a>
   
   
-    <a href="/2015/06/25/socket2-md/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">深入socket(二)</div>
-      <i class="icon-circle-right"></i>
-    </a>
-  
-</nav>
-
-
-
-
-
-  
-  
+    </div></section>
   
 
-  
-
-  
+    
 
 
           </div>
@@ -323,8 +196,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: true,
-		isArchive: false,
+		isPost: false,
+		isArchive: true,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
