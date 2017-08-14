@@ -1,0 +1,399 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>My Journey</title>
+    <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
+    <script language="javascript" src="http://webapi.amap.com/maps?v=1.3&key=860959c90cf7e6c90bdbf4378e344729&plugin=AMap.MarkerClusterer"></script>
+    <style>
+        html {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
+        #iCenter {
+            width: 100%;
+            height: calc(100% - 20px);
+            padding: 20px;
+        }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        .leaflet-popup-instagram a.leaflet-popup-close-button {
+            /*top: 0px;*/
+            /*right: -13px;*/
+            background-color: #fff;
+            padding: 5px;
+            border-radius: 12px;
+            width: 15px;
+            height: 15px;
+            box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+            color: #555;
+        }
+
+        .leaflet-popup-content-wrapper,
+        .leaflet-popup-tip {
+            background: white;
+
+            box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+        }
+
+        .leaflet-popup-content-wrapper {
+            text-align: left;
+
+        }
+
+        .leaflet-popup-instagram .leaflet-popup-content-wrapper {
+            padding: 0 0 1px 0;
+            border-radius: 6px;
+        }
+
+        .leaflet-popup-instagram .leaflet-popup-content {
+            margin: 13px 0;
+        }
+
+        .leaflet-popup-instagram img,
+        .leaflet-popup-instagram video {
+            width: 301px;
+            height: 301px;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .leaflet-popup-instagram p {
+            margin: 5px 10px 0 10px;
+        }
+
+        .leaflet-popup-tip-container {
+            margin: 0 auto;
+            width: 40px;
+            height: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .leaflet-oldie .leaflet-popup-tip-container {
+            margin-top: -1px;
+        }
+
+        /* popup */
+
+        .leaflet-popup {
+            /*position: absolute;*/
+            text-align: center;
+        }
+
+        .leaflet-popup-content {
+            margin: 13px 19px;
+            line-height: 1.4;
+        }
+
+        .leaflet-popup-content p {
+            margin: 18px 0;
+        }
+
+        .leaflet-popup-tip {
+            width: 17px;
+            height: 17px;
+            padding: 1px;
+
+            margin: -10px auto 0;
+
+            -webkit-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+
+        .leaflet-container a.leaflet-popup-close-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 4px 4px 0 0;
+            text-align: center;
+            width: 18px;
+            height: 14px;
+            color: #c3c3c3;
+            text-decoration: none;
+            font-weight: bold;
+            background: transparent;
+        }
+
+        .leaflet-container a.leaflet-popup-close-button:hover {
+            color: #999;
+        }
+
+        .leaflet-popup-instagram a.leaflet-popup-close-button:hover {
+            color: #333;
+            background-color: #eee;
+        }
+
+        #popup-pane {
+            position: absolute;
+            left: 100px;
+            top: 100px;
+        }
+
+
+
+
+
+
+
+
+
+    </style>
+</head>
+<body>
+<div id="iCenter"></div>
+
+
+<!--<div id="popup-pane">-->
+    <!--<div class="leaflet-popup leaflet-popup-instagram leaflet-zoom-animated"-->
+         <!--style="opacity: 1; transform: translate3d(3px, 343px, 0px);">-->
+        <!--<a class="leaflet-popup-close-button" href="#close">×</a>-->
+        <!--<div class="leaflet-popup-content-wrapper">-->
+            <!--<div class="leaflet-popup-content" style="width: 301px;">-->
+                <!--<a href="http://instagram.com/p/pQ1uamSkhC/" title="View on Instagram">-->
+                    <!--<img src="http://scontent-a.cdninstagram.com/hphotos-xpf1/t51.2885-15/10472008_268778276643825_1917661086_n.jpg">-->
+                <!--</a>-->
+                <!--<p>#lam #nam</p>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="leaflet-popup-tip-container">-->
+            <!--<div class="leaflet-popup-tip"></div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+<!--</div>-->
+
+
+
+
+
+</body>
+
+<script>
+
+    var os = function () {
+        var ua = navigator.userAgent,
+                isWindowsPhone = /(?:Windows Phone)/.test(ua),
+                isSymbian = /(?:SymbianOS)/.test(ua) || isWindowsPhone,
+                isAndroid = /(?:Android)/.test(ua),
+                isFireFox = /(?:Firefox)/.test(ua),
+                isChrome = /(?:Chrome|CriOS)/.test(ua),
+                isTablet = /(?:iPad|PlayBook)/.test(ua) || (isAndroid && !/(?:Mobile)/.test(ua)) || (isFireFox && /(?:Tablet)/.test(ua)),
+                isPhone = /(?:iPhone)/.test(ua) && !isTablet,
+                isPc = !isPhone && !isAndroid && !isSymbian;
+        return {
+            isTablet: isTablet,
+            isPhone: isPhone,
+            isAndroid: isAndroid,
+            isPc: isPc
+        };
+    }();
+
+
+    var imgs = [
+        "12.9473525,100.8876009.jpg",
+        "13.7465223,100.4911049.jpg",
+        "13.7499585,100.4914642.jpg",
+        "13.7500301,100.4890942.jpg",
+        "22.281589,114.157536.jpg",
+        "22.29123,114.179948.jpg",
+        "22.441983,113.529151.jpg",
+        "22.442552, 113.528384.jpg",
+        "23.106802,113.244707.jpg",
+        "24.451549,118.070904.jpg",
+        "24.620904,118.083264.jpg",
+        "29.29375,117.25156.jpg",
+        "29.338353,117.796104.jpg",
+        "29.453782,118.032855.jpg",
+        "30.218958,120.130115.jpg",
+        "30.228792,120.144709.jpg",
+        "31.193987,121.318911.jpg",
+        "31.225722,121.492512.jpg",
+        "31.2402611,121.4883883.jpg",
+        "31.263683,120.734402.jpg",
+        "31.321059,120.629124.jpg",
+        "31.32416,120.629029.jpg",
+        "31.562992,120.311085.jpg",
+        "31.566596,120.308744.jpg",
+        "36.059994,120.393326.jpg",
+        "36.104054,120.470434.jpg",
+        "39.127043,117.367324.jpg",
+        "39.158396,117.346777.jpg",
+    ];
+
+    var imgsize = 60;
+    var imgageScale = "?imageView2/2/w/" + imgsize + "/h/" + imgsize;
+    var mapObj = null;
+    var cluster, markers = [];
+    mapObj = new AMap.Map("iCenter", {center: new AMap.LngLat(105.505859, 30.371244), resizeEnable: true, zoom: 5});
+
+    mapObj.setMapStyle('amap://styles/' + "whitesmoke");
+
+    if (os.isAndroid || os.isPhone) {
+        mapObj.setCenter(new AMap.LngLat(117.316933, 31.88513));
+    }
+
+    mapObj.clearMap();
+
+    var mapBounds = mapObj.getBounds();
+    var sw = mapBounds.getSouthWest();
+    var ne = mapBounds.getNorthEast();
+    var lngSpan = Math.abs(sw.lng - ne.lng);
+    var latSpan = Math.abs(ne.lat - sw.lat);
+
+
+    for (var i = 0; i < imgs.length; i++) {
+
+        var img = imgs[i];
+        var latlng = img.slice(0, -4).split(",");
+        var markerPosition = new AMap.LngLat(latlng[1], latlng[0]);
+        var marker = new AMap.Marker({
+            map: mapObj,
+            position: markerPosition, //基点位置
+            content: '<img style="border: 2px solid #fff";boxShadow: 3px 3px 10px #888";" src="' + 'http://oujyr3c1x.bkt.clouddn.com/map-' + img + imgageScale + '" />',
+            url: 'http://oujyr3c1x.bkt.clouddn.com/map-' + img + '?imageView2/2/w/100/h/100',
+            origin_url: 'http://oujyr3c1x.bkt.clouddn.com/map-' + img,
+        });
+
+        marker.on('click', markerClick);
+
+        markers.push(marker);
+    }
+
+    function markerClick(e) {
+
+        var infoWindow = new AMap.InfoWindow({
+            isCustom: true,
+            content:'\
+            <div class="leaflet-popup leaflet-popup-instagram leaflet-zoom-animated" style="opacity: 1;">\
+                <a class="leaflet-popup-close-button" onclick="mapObj.clearInfoWindow()" href="#close" style="text-decoration:none">×</a>\
+        <div class="leaflet-popup-content-wrapper">\
+            <div class="leaflet-popup-content" style="width: 301px;">\
+                <a href="http://instagram.com/p/pQ1uamSkhC/" onclick="mapObj.clearInfoWindow()" title="View on Instagram">'+
+                    '<img src=' + e.target.Qi.origin_url+ '>\
+                </a>\
+                <p>&nbsp;</p>\
+            </div>\
+        </div>\
+        <div class="leaflet-popup-tip-container">\
+                <div class="leaflet-popup-tip"></div>\
+                </div>\
+                </div>\
+                ',
+//            size: new AMap.Size(100, 0),
+            offset:new AMap.Pixel(20, -30),
+            position: e.target.getPosition(),
+        });
+//        infoWindow.open(mapObj, mapObj.getCenter());
+        infoWindow.open(mapObj, e.target.getPosition());
+    }
+
+    var count = markers.length;
+    var _renderCluserMarker = function (context) {
+        console.log(context.markers[0].Qi.url);
+        var factor = Math.pow(context.count / count, 1 / 18)
+        var div = document.createElement('div');
+        var size = imgsize;
+        div.style.width = div.style.height = size + 'px';
+        div.style.backgroundImage = "url(" + context.markers[0].Qi.url + ")";
+
+        div.style.lineHeight = size + 'px';
+        div.style.color = 'rgb(255, 255, 255)';
+        div.style.fontSize = '20px';
+        div.style.textAlign = 'center';
+        div.style.border = "2px solid #fff";
+        div.style.boxShadow = "3px 3px 10px #888";
+        var b = document.createElement('b');
+
+        var cornerMarkSize = 12;
+        b.style.position = "absolute";
+        b.style.color = "#fff";
+        b.style.backgroundColor = "#117ffd";
+        b.style.borderRadius = "8px";
+        b.style.height = cornerMarkSize + "px";
+        b.style.minWidth = cornerMarkSize + "px";
+        b.style.lineHeight = "12px";
+        b.style.top = "-7px";
+        b.style.left = (imgsize - cornerMarkSize / 2) + "px";
+        b.style.textAlign = "center";
+        b.style.padding = "4px";
+        b.style.fontSize = "14px";
+        b.style.boxShadow = "0 3px 14px rgba(0,0,0,0.4)"
+        b.innerHTML = context.count;
+        div.appendChild(b);
+        context.marker.setOffset(new AMap.Pixel(-size / 2, -size / 2));
+        context.marker.setContent(div)
+    };
+    addCluster(2);
+
+    function addCluster(tag) {
+        if (cluster) {
+            cluster.setMap(null);
+        }
+        if (tag == 1) {
+            var sts = [
+                {
+                    url: "map-images/1.png",
+                    size: new AMap.Size(74, 75),
+                    offset: new AMap.Pixel(-16, -30),
+                    textColor: '#ffffff',
+                    textSize: 20
+                },
+                {
+                    url: "map-images/2.png",
+                    size: new AMap.Size(74, 75),
+                    offset: new AMap.Pixel(-16, -30),
+                    textColor: '#ffffff',
+                    textSize: 20
+                },
+                {
+                    url: "../img/map/set/3.png",
+                    size: new AMap.Size(74, 75),
+                    offset: new AMap.Pixel(-24, -45),
+                    textColor: '#ffffff',
+                    textSize: 20
+                }];
+            mapObj.plugin(["AMap.MarkerClusterer"], function () {
+                cluster = new AMap.MarkerClusterer(mapObj, markers, {minClusterSize: 2, gridSize: 50, styles: sts});
+            });
+        }
+        else {
+            console.log("xxxx");
+            var cluster = new AMap.MarkerClusterer(mapObj, markers, {
+                gridSize: 60,
+                renderCluserMarker: _renderCluserMarker
+            });
+
+        }
+    }
+
+</script>
+
+</html>

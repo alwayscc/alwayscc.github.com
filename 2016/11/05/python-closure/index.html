@@ -6,18 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>python-closure | cc</title>
+  <title>深入理解装饰器闭包 | cc</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="这次聊一下Python闭包的实现。 首先说下什么是闭包。以下为维基百科的定义。   在计算机科学中，闭包（英语：Closure），又称词法闭包（Lexical Closure）或函数闭包（function closures），是引用了自由变量的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。闭">
 <meta property="og:type" content="article">
-<meta property="og:title" content="python-closure">
+<meta property="og:title" content="深入理解装饰器闭包">
 <meta property="og:url" content="http://yoursite.com/2016/11/05/python-closure/index.html">
 <meta property="og:site_name" content="cc">
 <meta property="og:description" content="这次聊一下Python闭包的实现。 首先说下什么是闭包。以下为维基百科的定义。   在计算机科学中，闭包（英语：Closure），又称词法闭包（Lexical Closure）或函数闭包（function closures），是引用了自由变量的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。闭">
 <meta property="og:image" content="http://7xkghb.com1.z0.glb.clouddn.com/blog-106.png">
-<meta property="og:updated_time" content="2017-07-11T02:58:41.000Z">
+<meta property="og:updated_time" content="2017-08-14T03:24:42.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="python-closure">
+<meta name="twitter:title" content="深入理解装饰器闭包">
 <meta name="twitter:description" content="这次聊一下Python闭包的实现。 首先说下什么是闭包。以下为维基百科的定义。   在计算机科学中，闭包（英语：Closure），又称词法闭包（Lexical Closure）或函数闭包（function closures），是引用了自由变量的函数。这个被引用的自由变量将和这个函数一同存在，即使已经离开了创造它的环境也不例外。所以，有另一种说法认为闭包是由函数和与其相关的引用环境组合而成的实体。闭">
 <meta name="twitter:image" content="http://7xkghb.com1.z0.glb.clouddn.com/blog-106.png">
   
@@ -27,12 +27,18 @@
     <link rel="icon" href="/favicon.png">
   
   <link rel="stylesheet" type="text/css" href="/./main.b3331d.css">
+<link rel="stylesheet" type="text/css" href="/./profile.min.css">
+<link rel="stylesheet" type="text/css" href="/./bootstrap.min.css">
+<link href="https://fonts.googleapis.com/css?family=Montserrat" rel="stylesheet">
   <style type="text/css">
   
     #container.show {
       background: linear-gradient(200deg,#a0cfe4,#e8c37e);
     }
   </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  
   
 
   
@@ -144,7 +150,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      python-closure
+      深入理解装饰器闭包
     </h1>
   
 
@@ -350,7 +356,7 @@
   
   
     <a href="/2015/10/03/epoll/" id="article-nav-older" class="article-nav-link-wrap">
-      <div class="article-nav-title">epoll</div>
+      <div class="article-nav-title">深入理解epoll</div>
       <i class="icon-circle-right"></i>
     </a>
   
