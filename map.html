@@ -268,7 +268,7 @@
     var lngSpan = Math.abs(sw.lng - ne.lng);
     var latSpan = Math.abs(ne.lat - sw.lat);
 
-
+    mapObj.on('zoomstart', mapObj.clearInfoWindow);
     for (var i = 0; i < imgs.length; i++) {
 
         var img = imgs[i];
@@ -295,10 +295,10 @@
             <div class="leaflet-popup leaflet-popup-instagram leaflet-zoom-animated" style="opacity: 1;">\
                 <a class="leaflet-popup-close-button" onclick="mapObj.clearInfoWindow()" href="#close" style="text-decoration:none">×</a>\
         <div class="leaflet-popup-content-wrapper">\
-            <div class="leaflet-popup-content" style="width: 301px;">\
-                <a href="http://instagram.com/p/pQ1uamSkhC/" onclick="mapObj.clearInfoWindow()" title="View on Instagram">'+
+            <div class="leaflet-popup-content" onclick="mapObj.clearInfoWindow()" style="width: 301px;">\
+                '+
                     '<img src=' + e.target.Qi.origin_url+ '>\
-                </a>\
+                \
                 <p>&nbsp;</p>\
             </div>\
         </div>\
