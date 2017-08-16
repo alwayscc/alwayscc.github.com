@@ -14,7 +14,7 @@
 <meta property="og:url" content="http://yoursite.com/2017/08/06/python-vs-java-gc-1/index.html">
 <meta property="og:site_name" content="cc">
 <meta property="og:description" content="注：我们以下谈论的Python均指的是CPython我们以下谈论的JVM均指的HotSpot VM 引用计数(Reference Counting)PythonPython主要的GC机制，在Python对象内部维护一个被其他对象引用数的引用数值，当这个引用数值为0时，表明这个对象不再被其他对象引用，就可以被回收了。 这种算法的优点就是简单高效。无需挂起应用程序，很平滑地进行垃圾回收。而它的另外一个">
-<meta property="og:updated_time" content="2017-08-14T03:24:42.000Z">
+<meta property="og:updated_time" content="2017-08-16T07:39:07.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Python JAVA垃圾回收对比（一）">
 <meta name="twitter:description" content="注：我们以下谈论的Python均指的是CPython我们以下谈论的JVM均指的HotSpot VM 引用计数(Reference Counting)PythonPython主要的GC机制，在Python对象内部维护一个被其他对象引用数的引用数值，当这个引用数值为0时，表明这个对象不再被其他对象引用，就可以被回收了。 这种算法的优点就是简单高效。无需挂起应用程序，很平滑地进行垃圾回收。而它的另外一个">
@@ -176,7 +176,7 @@
 <p>其中 <code>[GC (System.gc()) [PSYoungGen: 6062K-&gt;464K(18944K)]</code> 明显发生了回收。因此JVM并非用的引用计数。 </p>
 <p>这里说一下，JAVA早期的GC也曾经使用过reference counting，不过现在主流的JVM已经放弃了。</p>
 <p>为啥Python还在用引用计数？除了上面提到的一些引用计数优点外，还有些是历史原因，早期的Python GC其实没有对循环引用这种做处理。而同时C 实现的API接口和一些数据结构都是建立在引用计数这个基础上的，后来改进垃圾回收算法支持了循环引用情况下的垃圾回收。但是此时想去掉引用计数已经不可能了。</p>
-<p>在引用计数之外还存在如下垃圾回收算法</p>
+<h1 id="其他回收算法"><a href="#其他回收算法" class="headerlink" title="其他回收算法"></a>其他回收算法</h1><p>在引用计数之外还存在如下垃圾回收算法</p>
 <ul>
 <li><p>标记清除(Mark Sweep)</p>
 <ul>
@@ -189,9 +189,9 @@
 <li>这样一来每次清理都要对一半的内存进行回收操作，这样内存碎片的问题就解决了，可以说简单，高效。</li>
 </ul>
 </li>
-<li><p>标记-整理（Mark-Compact）算法</p>
+<li><p>标记-压缩（Mark-Compact）算法</p>
 <ul>
-<li>复制收集算法在对象存活率较高时就要进行较多的复制操作，效率将会变低。更关键的是，如果不想浪费50%的空间，就需要有额外的空间进行分配担保，以应对被使用的内存中所有对象都100%存活的极端情况，所以在老年代一般不能直接选用这种算法。标记整理算法的标记过程类似标记清除算法，但后续步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存，类似于磁盘整理的过程，该垃圾回收算法适用于对象存活率高的场景。</li>
+<li>复制收集算法在对象存活率较高时就要进行较多的复制操作，效率将会变低。更关键的是，如果不想浪费50%的空间，就需要有额外的空间进行分配担保，以应对被使用的内存中所有对象都100%存活的极端情况。 标记整理算法的标记过程类似标记清除算法，但后续步骤不是直接对可回收对象进行清理，而是让所有存活的对象都向一端移动，然后直接清理掉端边界以外的内存，类似于磁盘整理的过程，该垃圾回收算法适用于对象存活率高的场景。</li>
 </ul>
 </li>
 <li><p>分代收集（Generational Collection）算法</p>
@@ -327,7 +327,7 @@
       <i class="icon-circle-left"></i>
       <div class="article-nav-title">
         
-          Python JAVA垃圾回收对比（一）
+          Python JAVA垃圾回收对比（二）
         
       </div>
     </a>

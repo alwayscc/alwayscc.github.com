@@ -6,17 +6,17 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Python JAVA垃圾回收对比（一） | cc</title>
+  <title>Python JAVA垃圾回收对比（二） | cc</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="分代回收分代回收把对象分为几类或几代，针对不同的代使用不同的GC算法。把刚生成的对象分为新生代对象，到达一定年龄的对象则成为老年对象。因为新生代大多数会变成垃圾，新生代中存活的对象放到老年代。老年代里的都曾经历过GC没有被回收，则老年代越不容易成为垃圾，应当减少GC频率。 Python对于Python来讲，gc的时候分为三代，0，1，2新产生的对象都放在0 代，0代的如果在一次gc过程后存活下来，">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Python JAVA垃圾回收对比（一）">
+<meta property="og:title" content="Python JAVA垃圾回收对比（二）">
 <meta property="og:url" content="http://yoursite.com/2017/08/13/python-vs-java-gc-2/index.html">
 <meta property="og:site_name" content="cc">
 <meta property="og:description" content="分代回收分代回收把对象分为几类或几代，针对不同的代使用不同的GC算法。把刚生成的对象分为新生代对象，到达一定年龄的对象则成为老年对象。因为新生代大多数会变成垃圾，新生代中存活的对象放到老年代。老年代里的都曾经历过GC没有被回收，则老年代越不容易成为垃圾，应当减少GC频率。 Python对于Python来讲，gc的时候分为三代，0，1，2新产生的对象都放在0 代，0代的如果在一次gc过程后存活下来，">
-<meta property="og:updated_time" content="2017-08-14T03:24:42.000Z">
+<meta property="og:updated_time" content="2017-08-16T07:39:07.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python JAVA垃圾回收对比（一）">
+<meta name="twitter:title" content="Python JAVA垃圾回收对比（二）">
 <meta name="twitter:description" content="分代回收分代回收把对象分为几类或几代，针对不同的代使用不同的GC算法。把刚生成的对象分为新生代对象，到达一定年龄的对象则成为老年对象。因为新生代大多数会变成垃圾，新生代中存活的对象放到老年代。老年代里的都曾经历过GC没有被回收，则老年代越不容易成为垃圾，应当减少GC频率。 Python对于Python来讲，gc的时候分为三代，0，1，2新产生的对象都放在0 代，0代的如果在一次gc过程后存活下来，">
   
     <link rel="alternative" href="/atom.xml" title="cc" type="application/atom+xml">
@@ -148,7 +148,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      Python JAVA垃圾回收对比（一）
+      Python JAVA垃圾回收对比（二）
     </h1>
   
 
@@ -168,15 +168,15 @@
 <p>由于Python的垃圾回收过程中会遍历所有的容器对象(上面解释了为了处理循环引用问题)，执行一次gc会消耗大量的资源。因此需要通过一些手段来避免频繁垃圾回收提高效率</p>
 <h2 id="JAVA"><a href="#JAVA" class="headerlink" title="JAVA"></a>JAVA</h2><p>对于JAVA来讲，JVM中共划分为三代，年轻代Young Generation, 老年代Old Generation, 持久代Permanent Generation 三种。</p>
 <p>年轻代又分为三个区，Eden，两个Survivor。大部分对象在Eden区生成，当Eden区满了时，还存活的被复制到Survivor区，等Survivor区慢了后，还存活的被复制到老年代。</p>
-<p>年轻代为什么有两个Survivor区。这里要引入一个新的gc算法 gc复制。jvm 对新生代的回收多采用的是gc复制算法。这个算法主要思想是把可用内存分为两部分。每次只使用一块，当一块用满了的时候，就将还存活的对象复制到另外一个上面，再把使用过的内存空间一次性清理掉，这样使得每次都对半个区进行内存回收，内存分配时也就不用考虑内部碎片等复杂情况。所以年轻代分为了Eden 和 两个survivor，但是每次只使用一个Survivor。每当回收时就把Eden和survivor中还存活的对象一次性复制到另一个survivor空间上，最后清理掉Eden和刚才用过的survivor空间。</p>
+<p>年轻代为什么有两个Survivor区。因为对于年轻代采用的是复制算法。上一篇讲过这个算法主要思想是把可用内存分为两部分。每次只使用一块，当一块用满了的时候，就将还存活的对象复制到另外一个上面，再把使用过的内存空间一次性清理掉，这样使得每次都对半个区进行内存回收，内存分配时也就不用考虑内部碎片等复杂情况。所以年轻代分为了Eden 和 两个survivor，但是每次只使用一个Survivor。每当回收时就把Eden和survivor中还存活的对象一次性复制到另一个survivor空间上，最后清理掉Eden和刚才用过的survivor空间。如果只有一个survivor区，那么当gc 时，eden 存活的被复制到survivor中，那么survivor中存活的是不是就必须得进入老年代了呢？这样过早的进入老年代效率会大打折扣</p>
 <p>假设在年轻代的对象每经理一次minor gc，年龄age 就+1 ，经历过N次之后，年龄到了N岁(默认为15岁)，就会被转送到老年代。年轻代晋升到老年代这个阈值可以通过jvm 参数来控制。</p>
+<p>好，我们知道了年轻代使用的是复制算法，老年代使用的是哪种回收算法呢？老年代的特点是对象存活率极高，没有额外空间，因此不能选用复制算法，使用的是标记清理或者标记压缩。</p>
 <h1 id="关于python的调优建议"><a href="#关于python的调优建议" class="headerlink" title="关于python的调优建议"></a>关于python的调优建议</h1><ol>
 <li>手动垃圾回收<br>先关闭自动回收 gc <code>gc.disable()</code> 然后再执行完你需要的函数后手动gc。这样就可以避免函数运行过程中gc带来的开销。缺点呢容易内存溢出。   </li>
 </ol>
 <ol>
 <li>调高垃圾回收的阈值<br>这个在游戏程序中比较常见，例如在某游戏中某一时刻产生大量的游戏对象比如说(1000个子弹对象)，如果此时的threshold0 小于1000，则立马会触发gc，但其实这1000个子弹对象并不需要被回收。这就造成了不必要的gc开销。此时需要将thrshold0设置大于1000，则就不会触发gc，只需要静静的等待子弹被消耗完，用引用计数机制自动释放即可。</li>
 </ol>
-<p>分代收集的思想是存活越久越不可能是垃圾，回收的频率就应该越低</p>
 
       
 
