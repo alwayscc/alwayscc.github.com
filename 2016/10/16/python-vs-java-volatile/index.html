@@ -6,14 +6,22 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives | cc</title>
+  <title>JAVA vs Python 多线程对比之 volatile | cc</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="cc">
-<meta property="og:url" content="http://yoursite.com/archives/index.html">
+  <meta name="description" content="Java中所有变量都储存在主存中，对于所有线程都是共享的（因为在同一进程中），每个线程都有自己的工作内存或本地内存(Working Memory)，工作内存中保存的是主存中某些变量的拷贝，线程对所有变量的操作都是在工作内存中进行，而线程之间无法相互直接访问，变量传递均需要通过主存完成。 当然这只是模型，真实的物理世界并非如此，其实工作内存对应的就是CPU的缓存。这里不详细讲CPU的工作原理了。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA vs Python 多线程对比之 volatile">
+<meta property="og:url" content="http://yoursite.com/2016/10/16/python-vs-java-volatile/index.html">
 <meta property="og:site_name" content="cc">
+<meta property="og:description" content="Java中所有变量都储存在主存中，对于所有线程都是共享的（因为在同一进程中），每个线程都有自己的工作内存或本地内存(Working Memory)，工作内存中保存的是主存中某些变量的拷贝，线程对所有变量的操作都是在工作内存中进行，而线程之间无法相互直接访问，变量传递均需要通过主存完成。 当然这只是模型，真实的物理世界并非如此，其实工作内存对应的就是CPU的缓存。这里不详细讲CPU的工作原理了。">
+<meta property="og:image" content="http://7xkghb.com1.z0.glb.clouddn.com/blog-109.png">
+<meta property="og:image" content="http://7xkghb.com1.z0.glb.clouddn.com/blog-107.png">
+<meta property="og:image" content="http://7xkghb.com1.z0.glb.clouddn.com/blog-108.png">
+<meta property="og:updated_time" content="2017-08-16T07:36:13.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cc">
+<meta name="twitter:title" content="JAVA vs Python 多线程对比之 volatile">
+<meta name="twitter:description" content="Java中所有变量都储存在主存中，对于所有线程都是共享的（因为在同一进程中），每个线程都有自己的工作内存或本地内存(Working Memory)，工作内存中保存的是主存中某些变量的拷贝，线程对所有变量的操作都是在工作内存中进行，而线程之间无法相互直接访问，变量传递均需要通过主存完成。 当然这只是模型，真实的物理世界并非如此，其实工作内存对应的就是CPU的缓存。这里不详细讲CPU的工作原理了。">
+<meta name="twitter:image" content="http://7xkghb.com1.z0.glb.clouddn.com/blog-109.png">
   
     <link rel="alternative" href="/atom.xml" title="cc" type="application/atom+xml">
   
@@ -137,315 +145,169 @@
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-python-vs-java-volatile" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2017" class="archive-year">2017</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/13/python-vs-java-gc-2/" class="archive-article-date">
-  	<time datetime="2017-08-13T14:12:48.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-13</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/13/python-vs-java-gc-2/">Python JAVA垃圾回收对比（一）</a>
+    <h1 class="article-title" itemprop="name">
+      JAVA vs Python 多线程对比之 volatile
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/08/06/python-vs-java-gc-1/" class="archive-article-date">
-  	<time datetime="2017-08-06T10:12:27.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-06</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/08/06/python-vs-java-gc-1/">Python JAVA垃圾回收对比（一）</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/07/01/block-chain/" class="archive-article-date">
-  	<time datetime="2017-07-01T11:38:36.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-07-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/07/01/block-chain/">区块链</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/03/01/correct-an-error/" class="archive-article-date">
-  	<time datetime="2017-03-01T11:36:57.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-03-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/03/01/correct-an-error/">更改一个错误—accept在不同操作系统实现细节略有不同</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2017/02/01/closewait/" class="archive-article-date">
-  	<time datetime="2017-02-01T10:29:05.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-02-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2017/02/01/closewait/">closewait</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/12/06/reuse-and-timewait/" class="archive-article-date">
-  	<time datetime="2016-12-06T10:27:37.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-12-06</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/12/06/reuse-and-timewait/">reuse-and-timewait</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/11/05/python-closure/" class="archive-article-date">
-  	<time datetime="2016-11-05T12:14:41.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-11-05</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/11/05/python-closure/">深入理解装饰器闭包</a>
-    </h1>
-  
-
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/10/16/python-vs-java-volatile/" class="archive-article-date">
+        
+        <a href="/2016/10/16/python-vs-java-volatile/" class="archive-article-date">
   	<time datetime="2016-10-16T07:34:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-16</time>
 </a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/10/16/python-vs-java-volatile/">JAVA vs Python 多线程对比之 volatile</a>
-    </h1>
-  
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>Java中所有变量都储存在主存中，对于所有线程都是共享的（因为在同一进程中），每个线程都有自己的工作内存或本地内存(Working Memory)，工作内存中保存的是主存中某些变量的拷贝，线程对所有变量的操作都是在工作内存中进行，而线程之间无法相互直接访问，变量传递均需要通过主存完成。</p>
+<p>当然这只是模型，真实的物理世界并非如此，其实工作内存对应的就是CPU的缓存。这里不详细讲CPU的工作原理了。</p>
+<p><img src="http://7xkghb.com1.z0.glb.clouddn.com/blog-109.png" alt="blog-109"></p>
+<p>多线程开发中有个非常重要的问题是可见性。何为可见性呢，上面我们说了，每个线程并非实时读写主存，而是操作各自的工作线程。设想一下一种情况有一个变量a=1，两个线程（记为A和B，并且CPU核数&gt;=2)都对a进行+1 操作，预期结果两个线程各加一次。理想的顺序是</p>
+<p><img src="http://7xkghb.com1.z0.glb.clouddn.com/blog-107.png" alt="blog-107"></p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">A 从主存读取 <span class="keyword">a</span> 到A工作内存 <span class="keyword">a</span>=<span class="number">1</span></div><div class="line">A <span class="keyword">a</span> = <span class="keyword">a</span> +<span class="number">1</span> 此时<span class="keyword">a</span>为<span class="number">2</span></div><div class="line">A 将 <span class="keyword">a</span>写回主存(<span class="keyword">a</span>=<span class="number">2</span>)</div><div class="line"></div><div class="line">B 从主存读取 <span class="keyword">a</span> 到B工作内存 <span class="keyword">a</span>=<span class="number">2</span></div><div class="line">B <span class="keyword">a</span> = <span class="keyword">a</span>+<span class="number">1</span> 此时<span class="keyword">a</span>=<span class="number">3</span></div><div class="line">B 将 <span class="keyword">a</span> 写回主存(<span class="keyword">a</span>=<span class="number">3</span>)</div></pre></td></tr></table></figure>
+<p>此时a结果为3。</p>
+<p>但是真实情况，在CPU核1上执行A两条命令后，CPU核2上立即开始执行B，时间顺序如下<br>但如果如果CPU核1上a增加1后还尚未写会主存，CPU核2上已经开始执行B了</p>
+<p><img src="http://7xkghb.com1.z0.glb.clouddn.com/blog-108.png" alt="blog-108"></p>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">A 从主存读取<span class="keyword">a</span> 到A工组内存 <span class="keyword">a</span>=<span class="number">1</span></div><div class="line">A <span class="keyword">a</span> = <span class="keyword">a</span>+<span class="number">1</span> 此时<span class="keyword">a</span>为<span class="number">2</span></div><div class="line">B 从主存读取<span class="keyword">a</span> 到B工作内存 <span class="keyword">a</span>=<span class="number">1</span></div><div class="line">B <span class="keyword">a</span> = <span class="keyword">a</span>+<span class="number">1</span> 此时<span class="keyword">a</span>仍为<span class="number">2</span></div><div class="line">A 将<span class="keyword">a</span> 写回主存(<span class="keyword">a</span>=<span class="number">2</span>)</div><div class="line">B 将<span class="keyword">a</span> 写会主存(<span class="keyword">a</span>=<span class="number">2</span>)</div></pre></td></tr></table></figure>
+<p>此时a的结果变为2</p>
+<p>可见性就是一个线程修改了某个共享变量后，那么其他线程应该能看到这个被修改后的值。<br>JAVA中 volatile关键字 可以实现此功能，被 volatile 修饰的变量，多线程访问此变量时，不会操作自己的工作内存，而是会直接操作主存。这样就可以避免我们刚才所说的问题。A，B二者同时操作的都是主存，当A a=a+1直接改变了主存， B再去取主存时取到的就是2而非1。</p>
+<p>OK，这是JAVA的一个处理方法，那么Python有没有类似这种的机制呢？<br>没有，因为不需要。<br>Python多线程编程的知道，Python的多线程其实是伪多线程，因为有一把无情的GIL(全局解释锁)存在。多线程时，同一时刻只有一个进程可以拥有这把全局解释锁，也就是说不管你CPU有几个核，同一时间只能运行一个线程。</p>
+<p>那么当切换线程时变会上下文切换，就会造成缓存失效。所以也就不会出现上面的情况。</p>
+<p>但是volatile并不能取代锁，并不能保证完全同步。虽然保证了可见性，一旦A更改了a 的值，B读取时会立即读取最新的a值，但是如果B读取时，A也只是刚取到a值尚未进行+1操作，B就立刻取值，取到的仍是脏数据。</p>
+<p>volatile应用场景举例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">NoVisibility</span> </span>&#123;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">volatile</span> <span class="keyword">boolean</span> ready;</div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> number;</div><div class="line"></div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">ReaderThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="keyword">while</span> (!ready);</div><div class="line">            System.out.println(number);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> InterruptedException </span>&#123;</div><div class="line">        <span class="keyword">new</span> ReaderThread().start();</div><div class="line">        Thread.sleep(<span class="number">1000</span>);</div><div class="line">        number = <span class="number">42</span>;</div><div class="line">        ready = <span class="keyword">true</span>;</div><div class="line">        Thread.sleep(<span class="number">50000</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面这段代码如果不用volatile修饰ready，则ReaderThread线程永远不会读取到main线程修改后的ready值永远不会退出。</p>
 
-        <div class="article-info info-on-right">
-          
-          
+      
 
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我喝咖啡<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="http://7xkghb.com1.z0.glb.clouddn.com/Alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2016/10/16/python-vs-java-volatile/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
   
-    
-    
-      
-        </div></section>
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2015" class="archive-year">2015</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/10/03/epoll/" class="archive-article-date">
-  	<time datetime="2015-10-03T08:36:26.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-10-03</time>
-</a>
-        </div>
-    	 
+<nav id="article-nav">
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/10/03/epoll/">深入理解epoll</a>
-    </h1>
+    <a href="/2016/11/05/python-closure/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          深入理解装饰器闭包
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2015/10/03/epoll/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">深入理解epoll</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+  
+  
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-    
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2015/10/01/select/" class="archive-article-date">
-  	<time datetime="2015-10-01T08:36:22.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2015-10-01</time>
-</a>
-        </div>
-    	 
-  
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2015/10/01/select/">深入select</a>
-    </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
-
-        </div>
-        <div class="clearfix"></div>
-    </header>
-  </div>
-</article>
-  
-  
-    </div></section>
-  
-
-    
-    <nav id="page-nav">
-      <span class="page-number current">1</span><a class="page-number" href="/archives/page/2/">2</a><a class="extend next" rel="next" href="/archives/page/2/">Next &raquo;</a>
-    </nav>
   
 
 
@@ -469,8 +331,8 @@
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
