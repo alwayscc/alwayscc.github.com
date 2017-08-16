@@ -1,16 +1,14 @@
 layout: false
 ---
-
 <!DOCTYPE HTML>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <title>My Journey</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
-    <!-- 页面布局样式 -->
-    <!--<link rel="stylesheet" type="text/css" href="http://api.amap.com/Public/css/demo.Default.css"/>-->
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script language="javascript"
-            src="http://webapi.amap.com/maps?v=1.3&key=860959c90cf7e6c90bdbf4378e344729&plugin=AMap.MarkerClusterer"></script>
+            src="http://webapi.amap.com/maps?v=1.3&key=860959c90cf7e6c90bdbf4378e344729&plugin=AMap.MarkerClusterer,AMap.ToolBa"></script>
     <style>
         html {
             width: 100%;
@@ -24,15 +22,180 @@ layout: false
 
         #iCenter {
             width: 100%;
-            height: calc(100% - 20px);
-            padding: 20px;
+            height: calc(100% - 30px);
+            /*padding: 20px;*/
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        .leaflet-popup-instagram a.leaflet-popup-close-button {
+            /*top: 0px;*/
+            /*right: -13px;*/
+            background-color: #fff;
+            padding: 5px;
+            border-radius: 12px;
+            width: 15px;
+            height: 15px;
+            box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+            color: #555;
+        }
+
+        .leaflet-popup-content-wrapper,
+        .leaflet-popup-tip {
+            background: white;
+
+            box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
+        }
+
+        .leaflet-popup-content-wrapper {
+            text-align: left;
+
+        }
+
+        .leaflet-popup-instagram .leaflet-popup-content-wrapper {
+            padding: 0 0 1px 0;
+            border-radius: 6px;
+        }
+
+        .leaflet-popup-instagram .leaflet-popup-content {
+            margin: 13px 0;
+        }
+
+        .leaflet-popup-instagram img,
+        .leaflet-popup-instagram video {
+            width: 301px;
+            height: 301px;
+            border-radius: 4px 4px 0 0;
+        }
+
+        .leaflet-popup-instagram p {
+            margin: 5px 10px 0 10px;
+        }
+
+        .leaflet-popup-tip-container {
+            margin: 0 auto;
+            width: 40px;
+            height: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .leaflet-oldie .leaflet-popup-tip-container {
+            margin-top: -1px;
+        }
+
+        /* popup */
+
+        .leaflet-popup {
+            /*position: absolute;*/
+            text-align: center;
+        }
+
+        .leaflet-popup-content {
+            margin: 13px 19px;
+            line-height: 1.4;
+        }
+
+        .leaflet-popup-content p {
+            margin: 18px 0;
+        }
+
+        .leaflet-popup-tip {
+            width: 17px;
+            height: 17px;
+            padding: 1px;
+
+            margin: -10px auto 0;
+
+            -webkit-transform: rotate(45deg);
+            -moz-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            -o-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+
+        .leaflet-container a.leaflet-popup-close-button {
+            position: absolute;
+            top: 0;
+            right: 0;
+            padding: 4px 4px 0 0;
+            text-align: center;
+            width: 18px;
+            height: 14px;
+            color: #c3c3c3;
+            text-decoration: none;
+            font-weight: bold;
+            background: transparent;
+        }
+
+        .leaflet-container a.leaflet-popup-close-button:hover {
+            color: #999;
+        }
+
+        .leaflet-popup-instagram a.leaflet-popup-close-button:hover {
+            color: #333;
+            background-color: #eee;
+        }
+
+        #popup-pane {
+            position: absolute;
+            left: 100px;
+            top: 100px;
+        }
+
+
+
+
+
+
+
+
 
     </style>
 </head>
-<!--<body onLoad="mapInit()">-->
 <body>
 <div id="iCenter"></div>
+
+
+<!--<div id="popup-pane">-->
+    <!--<div class="leaflet-popup leaflet-popup-instagram leaflet-zoom-animated"-->
+         <!--style="opacity: 1; transform: translate3d(3px, 343px, 0px);">-->
+        <!--<a class="leaflet-popup-close-button" href="#close">×</a>-->
+        <!--<div class="leaflet-popup-content-wrapper">-->
+            <!--<div class="leaflet-popup-content" style="width: 301px;">-->
+                <!--<a href="http://instagram.com/p/pQ1uamSkhC/" title="View on Instagram">-->
+                    <!--<img src="http://scontent-a.cdninstagram.com/hphotos-xpf1/t51.2885-15/10472008_268778276643825_1917661086_n.jpg">-->
+                <!--</a>-->
+                <!--<p>#lam #nam</p>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="leaflet-popup-tip-container">-->
+            <!--<div class="leaflet-popup-tip"></div>-->
+        <!--</div>-->
+    <!--</div>-->
+
+<!--</div>-->
+
+
+
+
 </div>
 </body>
 
@@ -88,94 +251,165 @@ layout: false
         "39.158396,117.346777.jpg",
     ];
 
-
+    var imgsize = 60;
+    var imgageScale = "?imageView2/2/w/" + imgsize + "/h/" + imgsize;
     var mapObj = null;
     var cluster, markers = [];
     mapObj = new AMap.Map("iCenter", {center: new AMap.LngLat(105.505859, 30.371244), resizeEnable: true, zoom: 5});
-    //    mapObj = new AMap.Map("iCenter", {center: new AMap.LngLat(105.505859, 30.371244), resizeEnable: true, zoom: 5});
+
+    mapObj.plugin(["AMap.ToolBar"],function(){  var tool = new AMap.ToolBar(); mapObj.addControl(tool); });
+//    var
+//            toolBar = new AMap.ToolBar({
+//                visible: true
+//            }),
+//            overView = new AMap.OverView({
+//                visible: false
+//            }),
+//            map = new AMap.Map("container", {
+//                resizeEnable: true
+//            });
+//
+//    toolBar.show();
+
+    mapObj.setMapStyle('amap://styles/' + "whitesmoke");
+
     if (os.isAndroid || os.isPhone) {
         mapObj.setCenter(new AMap.LngLat(117.316933, 31.88513));
     }
 
-//    mapObj.plugin(["AMap.ToolBar"], function () { var tool = new AMap.ToolBar({position:"LT"}); tool.show();mapObj.addControl(tool); });
+    mapObj.clearMap();
 
-        mapObj.clearMap();
-        var mapBounds = mapObj.getBounds();
-        var sw = mapBounds.getSouthWest();
-        var ne = mapBounds.getNorthEast();
-        var lngSpan = Math.abs(sw.lng - ne.lng);
-        var latSpan = Math.abs(ne.lat - sw.lat);
+    var mapBounds = mapObj.getBounds();
+    var sw = mapBounds.getSouthWest();
+    var ne = mapBounds.getNorthEast();
+    var lngSpan = Math.abs(sw.lng - ne.lng);
+    var latSpan = Math.abs(ne.lat - sw.lat);
 
+    mapObj.on('zoomstart', mapObj.clearInfoWindow);
+    for (var i = 0; i < imgs.length; i++) {
 
-        for (var i = 0; i < imgs.length; i++) {
-//        var markerPosition = new AMap.LngLat(result.markers[i].lng, result.markers[i].lat);
-//        if (result.markers[i].url.length < 60) {
-//            var marker = new AMap.Marker({
-//                map: mapObj,
-//                position: markerPosition, //基点位置
-////            icon: "js_marker.png", //marker图标，直接传递地址url
-//                content: '<img src="http://localhost:63342/OA-instagram_maps/img/map/_1.jpg" />',
-////            offset: {x: -8, y: -34} //相对于基点的位置
-//            });
-//        }
-//        else {
-//            var marker = new AMap.Marker({
-//                map: mapObj,
-//                position: markerPosition, //基点位置
-//                content: '<img src="' + result.markers[i].url +'?imageView2/2/w/100/h/100' +'" />',
-//            });
-//        }
-            var img = imgs[i];
-            var latlng = img.slice(0, -4).split(",");
-            var markerPosition = new AMap.LngLat(latlng[1], latlng[0]);
-            var marker = new AMap.Marker({
-                map: mapObj,
-                position: markerPosition, //基点位置
-                content: '<img src="' + 'http://oujyr3c1x.bkt.clouddn.com/map-' + img + '?imageView2/2/w/100/h/100' + '" />',
-                url:'http://oujyr3c1x.bkt.clouddn.com/map-' + img + '?imageView2/2/w/100/h/100'
+        var img = imgs[i];
+        var latlng = img.slice(0, -4).split(",");
+        var markerPosition = new AMap.LngLat(latlng[1], latlng[0]);
+        var marker = new AMap.Marker({
+            map: mapObj,
+            position: markerPosition, //基点位置
+            content: '<img style="border: 2px solid #fff";boxShadow: 3px 3px 10px #888";" src="' + 'http://oujyr3c1x.bkt.clouddn.com/map-' + img + imgageScale + '" />',
+            url: 'http://oujyr3c1x.bkt.clouddn.com/map-' + img + '?imageView2/2/w/100/h/100',
+            origin_url: 'http://oujyr3c1x.bkt.clouddn.com/map-' + img,
+        });
+
+        marker.on('click', markerClick);
+
+        markers.push(marker);
+    }
+
+    function markerClick(e) {
+
+        var infoWindow = new AMap.InfoWindow({
+            isCustom: true,
+            content:'\
+            <div class="leaflet-popup leaflet-popup-instagram leaflet-zoom-animated" style="opacity: 1;">\
+                <a class="leaflet-popup-close-button" onclick="mapObj.clearInfoWindow()" href="#close" style="text-decoration:none">×</a>\
+        <div class="leaflet-popup-content-wrapper">\
+            <div class="leaflet-popup-content" onclick="mapObj.clearInfoWindow()" style="width: 301px;height: 301px">\
+                '+
+                    '<img src=' + e.target.Qi.origin_url+ '>\
+                \
+                <p>&nbsp;</p>\
+            </div>\
+        </div>\
+        <div class="leaflet-popup-tip-container">\
+                <div class="leaflet-popup-tip"></div>\
+                </div>\
+                </div>\
+                ',
+//            size: new AMap.Size(100, 0),
+            offset:new AMap.Pixel(20, -30),
+            position: e.target.getPosition(),
+        });
+//        infoWindow.open(mapObj, mapObj.getCenter());
+        infoWindow.open(mapObj, e.target.getPosition());
+    }
+
+    var count = markers.length;
+    var _renderCluserMarker = function (context) {
+        console.log(context.markers[0].Qi.url);
+        var factor = Math.pow(context.count / count, 1 / 18)
+        var div = document.createElement('div');
+        var size = imgsize;
+        div.style.width = div.style.height = size + 'px';
+        div.style.backgroundImage = "url(" + context.markers[0].Qi.url + ")";
+
+        div.style.lineHeight = size + 'px';
+        div.style.color = 'rgb(255, 255, 255)';
+        div.style.fontSize = '20px';
+        div.style.textAlign = 'center';
+        div.style.border = "2px solid #fff";
+        div.style.boxShadow = "3px 3px 10px #888";
+        var b = document.createElement('b');
+
+        var cornerMarkSize = 12;
+        b.style.position = "absolute";
+        b.style.color = "#fff";
+        b.style.backgroundColor = "#117ffd";
+        b.style.borderRadius = "8px";
+        b.style.height = cornerMarkSize + "px";
+        b.style.minWidth = cornerMarkSize + "px";
+        b.style.lineHeight = "12px";
+        b.style.top = "-7px";
+        b.style.left = (imgsize - cornerMarkSize / 2) + "px";
+        b.style.textAlign = "center";
+        b.style.padding = "4px";
+        b.style.fontSize = "14px";
+        b.style.boxShadow = "0 3px 14px rgba(0,0,0,0.4)"
+        b.innerHTML = context.count;
+        div.appendChild(b);
+        context.marker.setOffset(new AMap.Pixel(-size / 2, -size / 2));
+        context.marker.setContent(div)
+    };
+    addCluster(2);
+
+    function addCluster(tag) {
+        if (cluster) {
+            cluster.setMap(null);
+        }
+        if (tag == 1) {
+            var sts = [
+                {
+                    url: "map-images/1.png",
+                    size: new AMap.Size(74, 75),
+                    offset: new AMap.Pixel(-16, -30),
+                    textColor: '#ffffff',
+                    textSize: 20
+                },
+                {
+                    url: "map-images/2.png",
+                    size: new AMap.Size(74, 75),
+                    offset: new AMap.Pixel(-16, -30),
+                    textColor: '#ffffff',
+                    textSize: 20
+                },
+                {
+                    url: "../img/map/set/3.png",
+                    size: new AMap.Size(74, 75),
+                    offset: new AMap.Pixel(-24, -45),
+                    textColor: '#ffffff',
+                    textSize: 20
+                }];
+            mapObj.plugin(["AMap.MarkerClusterer"], function () {
+                cluster = new AMap.MarkerClusterer(mapObj, markers, {minClusterSize: 2, gridSize: 50, styles: sts});
+            });
+        }
+        else {
+            console.log("xxxx");
+            var cluster = new AMap.MarkerClusterer(mapObj, markers, {
+                gridSize: 60,
+                renderCluserMarker: _renderCluserMarker
             });
 
-            markers.push(marker);
         }
-        addCluster(1);
-        function addCluster(tag) {
-            if (cluster) {
-                cluster.setMap(null);
-            }
-            if (tag == 1) {
-                var sts = [
-                    {
-                        url: "map-images/1.png",
-//                        url:markers[0].  'http://oujyr3c1x.bkt.clouddn.com/map-' + img + '?imageView2/2/w/100/h/100'
-                        size: new AMap.Size(74, 75),
-                        offset: new AMap.Pixel(-16, -30),
-                        textColor: '#ffffff',
-                        textSize: 20
-                    },
-                    {
-                        url: "map-images/2.png",
-                        size: new AMap.Size(74, 75),
-                        offset: new AMap.Pixel(-16, -30),
-                        textColor: '#ffffff',
-                        textSize: 20
-                    },
-                    {
-                        url: "../img/map/set/3.png",
-                        size: new AMap.Size(74, 75),
-                        offset: new AMap.Pixel(-24, -45),
-                        textColor: '#ffffff',
-                        textSize: 20
-                    }];
-                mapObj.plugin(["AMap.MarkerClusterer"], function () {
-                    cluster = new AMap.MarkerClusterer(mapObj, markers, {minClusterSize: 2, gridSize: 60, styles: sts});
-                });
-            }
-            else {
-                mapObj.plugin(["AMap.MarkerClusterer"], function () {
-                    cluster = new AMap.MarkerClusterer(mapObj, markers);
-                });
-            }
-        }
+    }
 
 </script>
 
