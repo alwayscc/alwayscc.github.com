@@ -55,7 +55,7 @@ weixin:
 
 # Miscellaneous
 baidu_analytics: ''
-google_analytics: ''
+google_analytics: 'UA-104779541-1'
 favicon: /favicon.png
 
 #你的头像url
