@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <title>My Journey</title>
+    <title>My Tracks</title>
     <meta name="viewport" content="initial-scale=1.0, user-scalable=no, width=device-width">
     <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.min.js"></script>
     <script language="javascript" src="http://webapi.amap.com/maps?v=1.3&key=860959c90cf7e6c90bdbf4378e344729&plugin=AMap.MarkerClusterer,AMap.ToolBa"></script>
@@ -20,27 +20,7 @@
         #iCenter {
             width: 100%;
             height: calc(100% - 30px);
-            /*padding: 20px;*/
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         .leaflet-popup-instagram a.leaflet-popup-close-button {
             /*top: 0px;*/
@@ -158,13 +138,6 @@
         }
 
 
-
-
-
-
-
-
-
     </style>
 </head>
 <body>
@@ -172,25 +145,23 @@
 
 
 <!--<div id="popup-pane">-->
-    <!--<div class="leaflet-popup leaflet-popup-instagram leaflet-zoom-animated"-->
-         <!--style="opacity: 1; transform: translate3d(3px, 343px, 0px);">-->
-        <!--<a class="leaflet-popup-close-button" href="#close">×</a>-->
-        <!--<div class="leaflet-popup-content-wrapper">-->
-            <!--<div class="leaflet-popup-content" style="width: 301px;">-->
-                <!--<a href="http://instagram.com/p/pQ1uamSkhC/" title="View on Instagram">-->
-                    <!--<img src="http://scontent-a.cdninstagram.com/hphotos-xpf1/t51.2885-15/10472008_268778276643825_1917661086_n.jpg">-->
-                <!--</a>-->
-                <!--<p>#lam #nam</p>-->
-            <!--</div>-->
-        <!--</div>-->
-        <!--<div class="leaflet-popup-tip-container">-->
-            <!--<div class="leaflet-popup-tip"></div>-->
-        <!--</div>-->
-    <!--</div>-->
-
+<!--<div class="leaflet-popup leaflet-popup-instagram leaflet-zoom-animated"-->
+<!--style="opacity: 1; transform: translate3d(3px, 343px, 0px);">-->
+<!--<a class="leaflet-popup-close-button" href="#close">×</a>-->
+<!--<div class="leaflet-popup-content-wrapper">-->
+<!--<div class="leaflet-popup-content" style="width: 301px;">-->
+<!--<a href="http://instagram.com/p/pQ1uamSkhC/" title="View on Instagram">-->
+<!--<img src="http://scontent-a.cdninstagram.com/hphotos-xpf1/t51.2885-15/10472008_268778276643825_1917661086_n.jpg">-->
+<!--</a>-->
+<!--<p>#lam #nam</p>-->
+<!--</div>-->
+<!--</div>-->
+<!--<div class="leaflet-popup-tip-container">-->
+<!--<div class="leaflet-popup-tip"></div>-->
+<!--</div>-->
 <!--</div>-->
 
-
+<!--</div>-->
 
 
 
@@ -254,19 +225,10 @@
     var cluster, markers = [];
     mapObj = new AMap.Map("iCenter", {center: new AMap.LngLat(105.505859, 30.371244), resizeEnable: true, zoom: 5});
 
-    mapObj.plugin(["AMap.ToolBar"],function(){  var tool = new AMap.ToolBar(); mapObj.addControl(tool); });
-//    var
-//            toolBar = new AMap.ToolBar({
-//                visible: true
-//            }),
-//            overView = new AMap.OverView({
-//                visible: false
-//            }),
-//            map = new AMap.Map("container", {
-//                resizeEnable: true
-//            });
-//
-//    toolBar.show();
+    mapObj.plugin(["AMap.ToolBar"], function () {
+        var tool = new AMap.ToolBar();
+        mapObj.addControl(tool);
+    });
 
     mapObj.setMapStyle('amap://styles/' + "whitesmoke");
 
@@ -305,13 +267,13 @@
 
         var infoWindow = new AMap.InfoWindow({
             isCustom: true,
-            content:'\
+            content: '\
             <div class="leaflet-popup leaflet-popup-instagram leaflet-zoom-animated" style="opacity: 1;">\
                 <a class="leaflet-popup-close-button" onclick="mapObj.clearInfoWindow()" href="#close" style="text-decoration:none">×</a>\
         <div class="leaflet-popup-content-wrapper">\
             <div class="leaflet-popup-content" onclick="mapObj.clearInfoWindow()" style="width: 301px;height: 301px">\
-                '+
-                    '<img src=' + e.target.Qi.origin_url+ '>\
+                ' +
+            '<img src=' + e.target.Qi.origin_url + '>\
                 \
                 <p>&nbsp;</p>\
             </div>\
@@ -322,7 +284,7 @@
                 </div>\
                 ',
 //            size: new AMap.Size(100, 0),
-            offset:new AMap.Pixel(20, -30),
+            offset: new AMap.Pixel(20, -30),
             position: e.target.getPosition(),
         });
 //        infoWindow.open(mapObj, mapObj.getCenter());
@@ -399,7 +361,6 @@
             });
         }
         else {
-            console.log("xxxx");
             var cluster = new AMap.MarkerClusterer(mapObj, markers, {
                 gridSize: 60,
                 renderCluserMarker: _renderCluserMarker

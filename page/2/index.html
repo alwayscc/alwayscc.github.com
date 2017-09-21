@@ -12,6 +12,7 @@
 <meta property="og:title" content="cc">
 <meta property="og:url" content="http://yoursite.com/page/2/index.html">
 <meta property="og:site_name" content="cc">
+<meta property="og:locale" content="zh-CN">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="cc">
   
@@ -34,6 +35,19 @@
 
   
   
+<!-- Google Analytics -->
+<script type="text/javascript">
+(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+ga('create', 'UA-104779541-1', 'auto');
+ga('send', 'pageview');
+
+</script>
+<!-- End Google Analytics -->
+
 
   
 
@@ -69,12 +83,20 @@
 
             <div class="body">
                 <section class="spotlight">
+                    <a href="/archives" target="_blank" rel="noopener noreferrer"
+                       class="spotlight button large dark glyph-article"
+                       style="background-color:#305B90;color:#fff;font-weight:bold;" data-reactid="44">
+                        <span class="glyphicon gly-icon">&#xe056;</span>
+                        My Blogs
+                        </a>
+                </section>
+
+               <section class="spotlight">
                     <a href="/map.html" target="_blank" rel="noopener noreferrer"
                        class="spotlight button large dark glyph-article"
                        style="background-color:#305B90;color:#fff;font-weight:bold;" data-reactid="44">
                         <span class="glyphicon gly-icon">&#xe135;</span>
-                        My
-                        Tracks
+                        My Tracks
                         </a>
                 </section>
 

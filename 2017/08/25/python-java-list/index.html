@@ -6,15 +6,19 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>Archives: 2016/10 | cc</title>
+  <title>python java list 对比 | cc</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="cc">
-<meta property="og:url" content="http://yoursite.com/archives/2016/10/index.html">
+  <meta name="description" content="Java ArraysListJava 除了原生的数组外，collections 中还有 ArrayList, LinkedList, Vector三种。 ArrayList 动态数组，好处可以动态增长，缺点为此牺牲了效率。本质上，仍然是用array来存储对象 12345public class ArrayList&amp;lt;E&amp;gt; extends AbstractList&amp;lt;E&amp;gt;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="python java list 对比">
+<meta property="og:url" content="http://yoursite.com/2017/08/25/python-java-list/index.html">
 <meta property="og:site_name" content="cc">
+<meta property="og:description" content="Java ArraysListJava 除了原生的数组外，collections 中还有 ArrayList, LinkedList, Vector三种。 ArrayList 动态数组，好处可以动态增长，缺点为此牺牲了效率。本质上，仍然是用array来存储对象 12345public class ArrayList&amp;lt;E&amp;gt; extends AbstractList&amp;lt;E&amp;gt;">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2017-08-28T04:43:48.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="cc">
+<meta name="twitter:title" content="python java list 对比">
+<meta name="twitter:description" content="Java ArraysListJava 除了原生的数组外，collections 中还有 ArrayList, LinkedList, Vector三种。 ArrayList 动态数组，好处可以动态增长，缺点为此牺牲了效率。本质上，仍然是用array来存储对象 12345public class ArrayList&amp;lt;E&amp;gt; extends AbstractList&amp;lt;E&amp;gt;">
   
     <link rel="alternative" href="/atom.xml" title="cc" type="application/atom+xml">
   
@@ -157,49 +161,163 @@ ga('send', 'pageview');
             <canvas data-colors="#eaeaea" data-sectionHeight="100" data-contentId="js-content" id="myCanvas1" class="anm-canvas"></canvas>
           </div>
           <div id="js-content" class="content-ll">
-            
-  
-  
+            <article id="post-python-java-list" class="article article-type-post " itemscope itemprop="blogPost">
+  <div class="article-inner">
     
-    
-      
-      
-      <section class="archives-wrap">
-        <div class="archive-year-wrap">
-          <a href="/archives/2016" class="archive-year">2016</a>
-        </div>
-        <div class="archives">
-    
-    <article class="archive-article archive-type-post">
-  <div class="archive-article-inner">
-    <header class="archive-article-header">
-      	<div class="article-meta">
-	      	<a href="/2016/10/16/python-vs-java-volatile/" class="archive-article-date">
-  	<time datetime="2016-10-16T07:34:12.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2016-10-16</time>
-</a>
-        </div>
-    	 
+      <header class="article-header">
+        
   
-    <h1 itemprop="name">
-      <a class="archive-article-title" href="/2016/10/16/python-vs-java-volatile/">JAVA vs Python 多线程对比之 volatile</a>
+    <h1 class="article-title" itemprop="name">
+      python java list 对比
     </h1>
   
 
-        <div class="article-info info-on-right">
-          
-          
+        
+        <a href="/2017/08/25/python-java-list/" class="archive-article-date">
+  	<time datetime="2017-08-25T11:08:50.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2017-08-25</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="Java-ArraysList"><a href="#Java-ArraysList" class="headerlink" title="Java ArraysList"></a>Java ArraysList</h1><p>Java 除了原生的数组外，collections 中还有 ArrayList, LinkedList, Vector三种。</p>
+<p>ArrayList 动态数组，好处可以动态增长，缺点为此牺牲了效率。<br>本质上，仍然是用array来存储对象</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ArrayList</span>&lt;<span class="title">E</span>&gt; <span class="keyword">extends</span> <span class="title">AbstractList</span>&lt;<span class="title">E</span>&gt;</span></div><div class="line"><span class="class">        <span class="keyword">implements</span> <span class="title">List</span>&lt;<span class="title">E</span>&gt;, <span class="title">RandomAccess</span>, <span class="title">Cloneable</span>, <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span></span></div><div class="line"><span class="class"></span>&#123;</div><div class="line"><span class="keyword">transient</span> Object[] elementData; </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>当需要添加元素时，会调用ensureCapacityInternal查看是否需要扩容</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div></pre></td><td class="code"><pre><div class="line">public boolean add(E e) &#123;</div><div class="line">    ensureCapacityInternal(size + <span class="number">1</span>);  // Increments modCount!!</div><div class="line">    elementData[size++] = e;</div><div class="line">    <span class="keyword">return</span> true;</div><div class="line">&#125;</div><div class="line"></div><div class="line">private void ensureCapacityInternal(int minCapacity) &#123;</div><div class="line">    <span class="keyword">if</span> (elementData == DEFAULTCAPACITY_EMPTY_ELEMENTDATA) &#123;</div><div class="line">        minCapacity = Math.max(DEFAULT_CAPACITY, minCapacity);</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    ensureExplicitCapacity(minCapacity);</div><div class="line">&#125;</div><div class="line"></div><div class="line">private void ensureExplicitCapacity(int minCapacity) &#123;</div><div class="line">    modCount++;</div><div class="line"></div><div class="line">    // overflow-conscious code</div><div class="line">    <span class="keyword">if</span> (minCapacity - elementData.length &gt; <span class="number">0</span>)</div><div class="line">        grow(minCapacity);</div><div class="line">&#125;</div><div class="line"></div><div class="line">private void grow(int minCapacity) &#123;</div><div class="line">    // overflow-conscious code</div><div class="line">    int oldCapacity = elementData.length;</div><div class="line">    int newCapacity = oldCapacity + (oldCapacity &gt;&gt; <span class="number">1</span>);</div><div class="line">    <span class="keyword">if</span> (newCapacity - minCapacity &lt; <span class="number">0</span>)</div><div class="line">        newCapacity = minCapacity;</div><div class="line">    <span class="keyword">if</span> (newCapacity - MAX_ARRAY_SIZE &gt; <span class="number">0</span>)</div><div class="line">        newCapacity = hugeCapacity(minCapacity);</div><div class="line">    // minCapacity <span class="keyword">is</span> usually close to size, so this <span class="keyword">is</span> a win:</div><div class="line">    elementData = Arrays.copyOf(elementData, newCapacity);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>通过一步步调用，如果需要扩容，创建size更大的新数组，然后将原数组内容复制过去，并将引用指向新数组。</p>
+<p>这里发现扩容的时候并非需要多少就给多少，会额外给一部分空间，避免频繁进行扩容操作。默认只要空间不够了扩容为原先size 的1.5倍 <code>int newCapacity = oldCapacity + (oldCapacity &gt;&gt; 1);</code><br>(新空间如果不满足本次需求minCapacity，那么就用这次需求的最小值 minCapacity)。</p>
+<p>#Python List</p>
+<p>看下list 的append源码按照下面<code>PyList_Append-&gt; app1-&gt; list_resize</code>调用顺序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div></pre></td><td class="code"><pre><div class="line">int</div><div class="line">PyList_Append(PyObject *op, PyObject *newitem)</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> (PyList_Check(op) &amp;&amp; (newitem != NULL))</div><div class="line">        <span class="keyword">return</span> app1((PyListObject *)op, newitem);</div><div class="line">    PyErr_BadInternalCall();</div><div class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">static int</div><div class="line">app1(PyListObject *self, PyObject *v)</div><div class="line">&#123;</div><div class="line">    Py_ssize_t n = PyList_GET_SIZE(self);</div><div class="line"></div><div class="line">    <span class="keyword">assert</span> (v != NULL);</div><div class="line">    <span class="keyword">if</span> (n == PY_SSIZE_T_MAX) &#123;</div><div class="line">        PyErr_SetString(PyExc_OverflowError,</div><div class="line">            <span class="string">"cannot add more objects to list"</span>);</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (list_resize(self, n+<span class="number">1</span>) == <span class="number">-1</span>)</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line"></div><div class="line">    Py_INCREF(v);</div><div class="line">    PyList_SET_ITEM(self, n, v);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line"></div><div class="line">static int</div><div class="line">list_resize(PyListObject *self, Py_ssize_t newsize)</div><div class="line">&#123;</div><div class="line">    PyObject **items;</div><div class="line">    size_t new_allocated;</div><div class="line">    Py_ssize_t allocated = self-&gt;allocated;</div><div class="line"></div><div class="line">    /* Bypass realloc() when a previous overallocation <span class="keyword">is</span> large enough</div><div class="line">       to accommodate the newsize.  If the newsize falls lower than half</div><div class="line">       the allocated size, then proceed <span class="keyword">with</span> the realloc() to shrink the list.</div><div class="line">    */</div><div class="line">    <span class="keyword">if</span> (allocated &gt;= newsize &amp;&amp; newsize &gt;= (allocated &gt;&gt; <span class="number">1</span>)) &#123;</div><div class="line">        assert(self-&gt;ob_item != NULL || newsize == 0);</div><div class="line">        Py_SIZE(self) = newsize;</div><div class="line">        <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">    &#125;</div><div class="line"></div><div class="line"></div><div class="line">    new_allocated = (newsize &gt;&gt; 3) + (newsize &lt; 9 ? 3 : 6);</div><div class="line"></div><div class="line">    /* check <span class="keyword">for</span> integer overflow */</div><div class="line">    <span class="keyword">if</span> (new_allocated &gt; PY_SIZE_MAX - newsize) &#123;</div><div class="line">        PyErr_NoMemory();</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        new_allocated += newsize;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">if</span> (newsize == <span class="number">0</span>)</div><div class="line">        new_allocated = <span class="number">0</span>;</div><div class="line">    items = self-&gt;ob_item;</div><div class="line">    <span class="keyword">if</span> (new_allocated &lt;= (PY_SIZE_MAX / sizeof(PyObject *)))</div><div class="line">        PyMem_RESIZE(items, PyObject *, new_allocated);</div><div class="line">    <span class="keyword">else</span></div><div class="line">        items = NULL;</div><div class="line">    <span class="keyword">if</span> (items == NULL) &#123;</div><div class="line">        PyErr_NoMemory();</div><div class="line">        <span class="keyword">return</span> <span class="number">-1</span>;</div><div class="line">    &#125;</div><div class="line">    self-&gt;ob_item = items;</div><div class="line">    Py_SIZE(self) = newsize;</div><div class="line">    self-&gt;allocated = new_allocated;</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>大体的思路也跟Java 的 ArrayList很像，如果空间不够了就扩容，开辟一块新的空间，把原数据复制过去，然后引用指向新内存。<br>而且同样，扩容内存的时候也不是要多少给多少，依然会多给 <code>new_allocated = (newsize &gt;&gt; 3) + (newsize &lt; 9 ? 3 : 6);</code> 不过多给的算法就不太一样了。至于为啥要多给这么些个，用网上的话说，这些公式都是Python设计者当初经过大量实验得出的最佳实践。</p>
 
+      
+
+      
+        <div class="page-reward">
+          <a href="javascript:;" class="page-reward-btn tooltip-top">
+            <div class="tooltip tooltip-east">
+            <span class="tooltip-item">
+              赏
+            </span>
+            <span class="tooltip-content">
+              <span class="tooltip-text">
+                <span class="tooltip-inner">
+                  <p class="reward-p"><i class="icon icon-quo-left"></i>谢谢你请我喝咖啡<i class="icon icon-quo-right"></i></p>
+                  <div class="reward-box">
+                    
+                    <div class="reward-box-item">
+                      <img class="reward-img" src="http://7xkghb.com1.z0.glb.clouddn.com/Alipay.jpg">
+                      <span class="reward-type">支付宝</span>
+                    </div>
+                    
+                    
+                  </div>
+                </span>
+              </span>
+            </span>
+          </div>
+          </a>
         </div>
-        <div class="clearfix"></div>
-    </header>
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+      
+
+      
+
+      
+        
+<div class="share-btn share-icons tooltip-left">
+  <div class="tooltip tooltip-east">
+    <span class="tooltip-item">
+      <a href="javascript:;" class="share-sns share-outer">
+        <i class="icon icon-share"></i>
+      </a>
+    </span>
+    <span class="tooltip-content">
+      <div class="share-wrap">
+        <div class="share-icons">
+          <a class="weibo share-sns" href="javascript:;" data-type="weibo">
+            <i class="icon icon-weibo"></i>
+          </a>
+          <a class="weixin share-sns wxFab" href="javascript:;" data-type="weixin">
+            <i class="icon icon-weixin"></i>
+          </a>
+          <a class="qq share-sns" href="javascript:;" data-type="qq">
+            <i class="icon icon-qq"></i>
+          </a>
+          <a class="douban share-sns" href="javascript:;" data-type="douban">
+            <i class="icon icon-douban"></i>
+          </a>
+          <a class="qzone share-sns" href="javascript:;" data-type="qzone">
+            <i class="icon icon-qzone"></i>
+          </a>
+          <a class="facebook share-sns" href="javascript:;" data-type="facebook">
+            <i class="icon icon-facebook"></i>
+          </a>
+          <a class="twitter share-sns" href="javascript:;" data-type="twitter">
+            <i class="icon icon-twitter"></i>
+          </a>
+          <a class="google share-sns" href="javascript:;" data-type="google">
+            <i class="icon icon-google"></i>
+          </a>
+        </div>
+      </div>
+    </span>
+  </div>
+</div>
+
+<div class="page-modal wx-share js-wx-box">
+    <a class="close js-modal-close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <div class="wx-qrcode">
+      <img src="http://s.jiathis.com/qrcode.php?url=http://yoursite.com/2017/08/25/python-java-list/" alt="微信分享二维码">
+    </div>
+</div>
+
+<div class="mask js-mask"></div>
+      
+      <div class="clearfix"></div>
+    </div>
   </div>
 </article>
+
+  
+<nav id="article-nav">
+  
+    <a href="/2017/09/09/singleton/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          singleton
+        
+      </div>
+    </a>
   
   
-    </div></section>
+    <a href="/2017/08/13/python-vs-java-gc-2/" id="article-nav-older" class="article-nav-link-wrap">
+      <div class="article-nav-title">Python JAVA垃圾回收对比（二）</div>
+      <i class="icon-circle-right"></i>
+    </a>
+  
+</nav>
+
+
+
+
+
+  
+  
   
 
-    
+  
+
+  
 
 
           </div>
@@ -222,8 +340,8 @@ ga('send', 'pageview');
 	var yiliaConfig = {
 		mathjax: false,
 		isHome: false,
-		isPost: false,
-		isArchive: true,
+		isPost: true,
+		isArchive: false,
 		isTag: false,
 		isCategory: false,
 		open_in_new: false,
