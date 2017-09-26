@@ -15,7 +15,7 @@
 <meta property="og:site_name" content="cc">
 <meta property="og:description" content="autocommitmysql 为了让用户用起来爽，觉得让用户每条mysql语句执行完后，再写一个coomit太冗余了，索性我就帮你做了吧。默认开启了autocommit，你的每条mysql语句执行完后，都会立即commit。默认情况下mysql 是开启的。 1234567mysql&amp;gt; show variables like &amp;apos;autocommit&amp;apos;;+---------">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-09-21T06:51:32.000Z">
+<meta property="og:updated_time" content="2017-09-26T11:43:23.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="django ORM 的一些贴心措施（隐藏的坑）">
 <meta name="twitter:description" content="autocommitmysql 为了让用户用起来爽，觉得让用户每条mysql语句执行完后，再写一个coomit太冗余了，索性我就帮你做了吧。默认开启了autocommit，你的每条mysql语句执行完后，都会立即commit。默认情况下mysql 是开启的。 1234567mysql&amp;gt; show variables like &amp;apos;autocommit&amp;apos;;+---------">
@@ -188,6 +188,14 @@ ga('send', 'pageview');
 <h2 id="多表继承"><a href="#多表继承" class="headerlink" title="多表继承"></a>多表继承</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">class Father(models.Model):</div><div class="line">	father_field = xxx</div><div class="line">	father_filed = xxx</div><div class="line">	</div><div class="line">class Son(Father):</div><div class="line">	son_field = xxx</div><div class="line">	son_field = xxx</div></pre></td></tr></table></figure>
 <p>当你设计出了这种表时，基于这种考虑，我Son继承了Father，可以访问到Father里的任意数据。<br>比如 <code>Son.objects.filter(father_field=&#39;xxxx&#39;)</code> 而且Son里又不用存这些冗余数据。<br>不过这种写起来爽的前提建立在性能基础上。你每次查询Son表时都会同时也查询Father表。这种继承关系建立在OneToOne基础上，反映到mysql上就是join操作。</p>
 <p>因此最好避免使用多表继承，建议换成ForeignKey或者OneToOneField。</p>
+<h2 id="贴心的分页功能"><a href="#贴心的分页功能" class="headerlink" title="贴心的分页功能"></a>贴心的分页功能</h2><p>现在有个功能是让你遍历某个大表，首先你一定想到了 SomeModel.objects.all(), 然后for循环对吧。如果你这么做了，你会发现程序基本没法反映了，啥也不执行，卡在那里了。你用top命令去看下这个进程 <code>top -pid your_pid</code> 你会发现内存在蹭蹭涨，原因是django 的queryset 会把mysql执行结果一次性load 进内存。<br>然后你想到了用Paginator。<br>假设你的model 是 Merchandise，每次load 1000个</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">from django.core.paginator import Paginator</div><div class="line">chunksize = 1000</div><div class="line">all_merchandises = Merchandise.objects.all()</div><div class="line">p = Paginator(all_merchandises, chunksize)</div><div class="line"># 然后遍历page... ...</div></pre></td></tr></table></figure>
+<p>这样是解决了一次all 全部load进内存的尴尬。不过其实你会发现越翻的最后的页，越卡。</p>
+<p>分析下原因，看下<code>p.page(11).object_list</code>执行时的sql 语句</p>
+<p><code>SELECT xxxxx FROM `merchanides` LIMIT 1000 OFFSET 10000</code> 影响性能的就是这个offset。<br>对于mysql 来讲其实会去数据库搜出符合条件的11000个，然后返给你第10001-11000个。随着页码越来越大，这个offset也会越来越大，查询起来也会越来越慢。</p>
+<p>一个更好的方法</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">import gc</div><div class="line"></div><div class="line">def queryset_iterator(queryset, chunksize=1000):</div><div class="line">    pk = 0</div><div class="line">    last_pk = queryset.order_by(&apos;-pk&apos;)[0].pk</div><div class="line">    queryset = queryset.order_by(&apos;pk&apos;)</div><div class="line">    while pk &lt; last_pk:</div><div class="line">        for row in queryset.filter(pk__gt=pk)[:chunksize]:</div><div class="line">            pk = row.pk</div><div class="line">            yield row</div><div class="line">        gc.collect()</div></pre></td></tr></table></figure>
+<p>通过先对主键排序，然后记录上次chunksize 之后的主键，然后取某个chunksize 时 用 pk&gt;last_pk 来分块，成功的避免了offset。手动垃圾回收，主动清理垃圾。</p>
 
       
 
