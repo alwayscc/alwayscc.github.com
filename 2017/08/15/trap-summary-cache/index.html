@@ -6,18 +6,18 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="http://yoursite.com">
-  <title>trap-summary-cache | cc</title>
+  <title>缓存中遇到的坑 | cc</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="在很多业务中，我们通常会用缓存来减少数据库的直接访问，来减轻负载提高性能。下面列举下，自己在使用缓存过程中遇到的坑。 坑1 我们之前遇到过一个比较坑的例子是，有一次活动有一个跳转页，运营配置错了id，这个id是数据库中不存在的。用户请求就会击穿缓存，直接请求DB。 坑2 有一个推送落地页，当用户点击推送时会跳到我们指定id的帖子页面。我们在推送前已提前对此页面设置了缓存，并且设置了过期时间T。不过">
 <meta property="og:type" content="article">
-<meta property="og:title" content="trap-summary-cache">
+<meta property="og:title" content="缓存中遇到的坑">
 <meta property="og:url" content="http://yoursite.com/2017/08/15/trap-summary-cache/index.html">
 <meta property="og:site_name" content="cc">
 <meta property="og:description" content="在很多业务中，我们通常会用缓存来减少数据库的直接访问，来减轻负载提高性能。下面列举下，自己在使用缓存过程中遇到的坑。 坑1 我们之前遇到过一个比较坑的例子是，有一次活动有一个跳转页，运营配置错了id，这个id是数据库中不存在的。用户请求就会击穿缓存，直接请求DB。 坑2 有一个推送落地页，当用户点击推送时会跳到我们指定id的帖子页面。我们在推送前已提前对此页面设置了缓存，并且设置了过期时间T。不过">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-09-26T01:07:07.000Z">
+<meta property="og:updated_time" content="2017-09-26T01:07:44.000Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="trap-summary-cache">
+<meta name="twitter:title" content="缓存中遇到的坑">
 <meta name="twitter:description" content="在很多业务中，我们通常会用缓存来减少数据库的直接访问，来减轻负载提高性能。下面列举下，自己在使用缓存过程中遇到的坑。 坑1 我们之前遇到过一个比较坑的例子是，有一次活动有一个跳转页，运营配置错了id，这个id是数据库中不存在的。用户请求就会击穿缓存，直接请求DB。 坑2 有一个推送落地页，当用户点击推送时会跳到我们指定id的帖子页面。我们在推送前已提前对此页面设置了缓存，并且设置了过期时间T。不过">
   
     <link rel="alternative" href="/atom.xml" title="cc" type="application/atom+xml">
@@ -168,7 +168,7 @@ ga('send', 'pageview');
         
   
     <h1 class="article-title" itemprop="name">
-      trap-summary-cache
+      缓存中遇到的坑
     </h1>
   
 
