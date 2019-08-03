@@ -2,15 +2,19 @@
   <div class="nav-container">
     <div class="wrapper">
       <div class="left-logo">
-        <a href="">
+        <a href="/index">
           <img :src="logoSrc" alt="">
         </a>
       </div>
       <ul>
-        <li>首页</li>
-        <li>服务内容</li>
-        <li>关于我们</li>
-        <li>联系我们</li>
+       <router-link  class="router-link" tag="li" :to="{ path: 'index' }">首页</router-link>
+       <router-link  class="router-link" tag="li" :to="{ path: 'service' }">服务内容</router-link>
+       <router-link  class="router-link" tag="li" :to="{ path: 'about' }">关于我们</router-link>
+       <router-link  class="router-link" tag="li" :to="{ path: 'contact' }">联系我们</router-link>
+        <!--<li><router-link :to="{ path: 'index' }">首页</router-link></li>-->
+        <!--<li><router-link :to="{ path: 'service' }">服务内容</router-link></li>-->
+        <!--<li><router-link :to="{ path: 'about' }">关于我们</router-link></li>-->
+        <!--<li><router-link :to="{ path: 'contact' }">联系我们</router-link></li>-->
       </ul>
     </div>
   </div>
@@ -52,7 +56,21 @@
   li{
     list-style: none;
     float: left;
-    margin-left: 30px;
+    margin-left: 20px;
+  }
+  .router-link{
+    cursor: pointer;
+    padding: 10px;
+    /*border: 1px solid red;*/
+    width: 80px;
+    text-align: center;
+
+  }
+
+  .router-link-active{
+    background-color: #f13a3a;
+    border-radius: 15px;
+    color: white;
   }
 
 </style>

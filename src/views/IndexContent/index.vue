@@ -1,6 +1,8 @@
 <template>
   <div class="index-container">
     <div class="banner">
+      <div class="title"><span>定制服务</span></div>
+      <div class="desc"><span>为不同品牌机构量身定制最高效的营销方案</span></div>
     </div>
     <feature-items/>
     <service-items/>
@@ -30,7 +32,7 @@ import Contact from "@/components/Contact"
   }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
   /*img {*/
   /*width: 1440px;*/
   /*height: 500px;*/
@@ -41,11 +43,25 @@ import Contact from "@/components/Contact"
     cursor: default;
     /*background-position: 50% 50%;*/
     background-repeat: no-repeat;
-    /*overflow: hidden;*/
+    overflow: hidden;
     margin: 0px auto;
     position: relative;
     z-index: 1;
     background-size: cover;
     background-image:url("~@/assets/banner-index.jpg");
+    text-align: center;
+    span{
+      color: white;
+    }
+    .title{
+
+      margin-top: 150px;
+      font-size: 51px;
+    }
+    .desc{
+      margin-top: 100px;
+      font-size: 30px;
+
+    }
   }
 </style>
