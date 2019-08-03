@@ -11,7 +11,7 @@ Vue.use(Router)
 const routerMap = [
   {
     path: '',
-    redirect: '/about',
+    redirect: '/index',
   },
   {
     path: '/index',
