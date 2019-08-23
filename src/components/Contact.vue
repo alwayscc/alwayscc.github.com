@@ -12,7 +12,7 @@
       </li>
       <li>
         <svg-icon icon-class="mail"></svg-icon>
-        <span>邮箱: sfsdfsd@sfsdf.com</span>
+        <span>邮箱: bd@yibenzhiyuan.com</span>
       </li>
       <li>
         <svg-icon icon-class="location"></svg-icon>
